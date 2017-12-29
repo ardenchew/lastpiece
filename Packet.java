@@ -10,8 +10,4 @@ public class Packet {
 		return this.data;
 	}
 
-	public String toString() {
-		return this.data;
-	}
-
 }

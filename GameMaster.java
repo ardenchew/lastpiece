@@ -10,8 +10,23 @@ public class GameMaster {
 	}
 
 	public void setup() {
-		for (int n : setupArray) {
-			gameBoard.add(new Column(n, Column.COLUMNTYPE.COLUMNTYPE_COLLAPSED));
+		Column tempC;
+		for (int n : this.setupSize) {
+			tempC = new Column(n, Column.COLUMNTYPE.COLUMNTYPE_COLLAPSED);
+			tempC = this.fillEmpty(tempC);
+			gameBoard.add(tempC));
 		}
+	}
+
+	
+
+	public Column fillEmpty(Column c) throws IllegalArgumentException {
+		if (!c.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		for (int i = 0; i < c.size(); i++) {
+			c.add(new Packet());
+		}
+		return c;
 	}
 }
