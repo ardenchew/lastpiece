@@ -9,29 +9,41 @@ public class Column {
 	}
 
 	private final int size;
+	private int packetCount;
 	private COLUMNTYPE typeColumn;
 	private List<Packet> packetList;
 
 	Column(int size, COLUMNTYPE cType) {
 		this.size = size;
+		this.packetCount = 0;
 		this.typeColumn = cType;
 		this.packetList = new ArrayList<Packet>();
 
-		for (int i = 0; i < this.size; i++) {
-			packetList.add(new Packet());
+		if (this.typeColumn == COLUMNTYPE.COLUMNTYPE_SPARSE) {
+			for (int i = 0; i < this.size; i++) {
+				this.packetList.add(null);
+			}
 		}
 	}
 
-	public Packet get(int position) {
+	public Packet get(int position) throws IllegalArgumentException {
+		if (position >= this.size()) {
+			throw new IllegalArgumentException();
+		}
+
 		return this.packetList.get(position);
 	}
 
 	public boolean has(int position) {
-		return (position > this.size) && (packetList.get(position) != null);
+		return (position < this.packetList.size()) && (packetList.get(position) != null);
 	}
 
 	public int size() {
-		return this.packetList.size();
+		return this.size;
+	}
+
+	public int count() {
+		return this.packetCount;
 	}
 
 	public Packet remove(int position) throws IllegalArgumentException {
@@ -50,6 +62,7 @@ public class Column {
 			default:
 				break;
 		}
+		this.packetCount--;
 		return p;
 	}
 
@@ -63,6 +76,7 @@ public class Column {
 		} else {
 			throw new IllegalArgumentException();
 		}
+		this.packetCount++;
 	}
 
 	public Packet set(int position, Packet p) throws IllegalArgumentException {
@@ -76,6 +90,9 @@ public class Column {
 
 		Packet temp = packetList.get(position);
 		this.packetList.set(position, p);
+		if (temp == null) {
+			this.packetCount++;
+		}
 		return temp;
 	}
 
