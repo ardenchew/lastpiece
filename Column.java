@@ -31,7 +31,7 @@ public class Column {
 	}
 
 	public int size() {
-		return this.size;
+		return this.packetList.size();
 	}
 
 	public Packet remove(int position) throws IllegalArgumentException {
