@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 public class Board {
 	
@@ -94,4 +95,16 @@ public class Board {
 		}
 		return true;
 	}
+
+	public Iterator<Column> iterator() {
+		List<Column> fullList = new ArrayList<Column>();
+		Column temp;
+
+		for (int i = 0; i < this.size(); i++) {
+			temp = this.boardList.get(i);
+			fullList.add(temp);
+		}
+		return fullList.iterator();
+	}
+
 }
