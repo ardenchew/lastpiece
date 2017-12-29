@@ -8,7 +8,7 @@ public class Column {
 		COLUMNTYPE_SPARSE
 	}
 
-	private int size;
+	private final int size;
 	private COLUMNTYPE typeColumn;
 	private List<Packet> packetList;
 
@@ -53,5 +53,30 @@ public class Column {
 		return p;
 	}
 
+	public void add(Packet p) throws IllegalArgumentException {
+		if (this.typeColumn == COLUMNTYPE.COLUMNTYPE_SPARSE) {
+			throw new IllegalArgumentException();
+		}
+
+		if (this.packetList.size() < this.size) {
+			this.packetList.add(p);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	public Packet set(int position, Packet p) throws IllegalArgumentException {
+		if (this.typeColumn == COLUMNTYPE.COLUMNTYPE_COLLAPSED) {
+			throw new IllegalArgumentException();
+		}
+
+		if (position >= this.size) {
+			throw new IllegalArgumentException();
+		}
+
+		Packet temp = packetList.get(position);
+		this.packetList.set(position, p);
+		return temp;
+	}
 
 }
