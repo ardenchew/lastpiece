@@ -5,22 +5,33 @@ import java.util.ArrayList;
 public class BoardView {
 
 	Board b;
-	ArrayList<ArrayList<String>> data;
+	String data;
 
 	BoardView(Board temp) {
 		this.b = temp;
-		this.data = new ArrayList<ArrayList<String>>();
-		Iterator<Column> iter = this.b.iterator();
-		ColumnView cView;
-
-
-		while(iter.hasNext()) {
-			cView = new ColumnView(iter.next());
-			this.data.add(cView.getData());
-		}
+		this.data = this.toString(this.b);
 	}
 
-	public ArrayList<ArrayList<String>> getData() {
+	public String toString(Board b) {
+		String s = "[";
+		Iterator<Column> iter = this.b.iterator();
+		Column c;
+		ColumnView cv;
+		boolean editEnd = false;
+		while (iter.hasNext()) {
+			editEnd = true;
+			c = iter.next();
+			cv = new ColumnView(c);
+			s += cv.getData() + ", ";
+		}
+		if (editEnd) {
+			s = s.substring(0, (s.length() - 2));
+		}
+		s += "]";
+		return s;
+	}
+
+	public String getData() {
 		return this.data;
 	}
 	
