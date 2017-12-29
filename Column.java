@@ -3,13 +3,20 @@ import java.util.List;
 
 public class Column {
 	
+	public enum COLUMNTYPE {
+		COLUMNTYPE_COLLAPSED,
+		COLUMNTYPE_SPARSE
+	}
 
 	private int size;
+	private COLUMNTYPE typeColumn;
+	private List<Packet> packetList;
 
-	Column(int size) {
+	Column(int size, COLUMNTYPE cType) {
 		this.size = size;
+		this.typeColumn = cType;
+		this.packetList = new ArrayList<Packet>();
 
-		List<Packet> packetList = new ArrayList<Packet>();
 		for (int i = 0; i < this.size; i++) {
 			packetList.add(new Packet());
 		}
@@ -20,13 +27,31 @@ public class Column {
 	}
 
 	public boolean has(int position) {
-		return (position > this.size);
+		return (position > this.size) && (packetList.get(position) != null);
 	}
 
 	public int size() {
 		return this.size;
 	}
 
-	public abstract Packet remove(int position) {}
+	public Packet remove(int position) throws IllegalArgumentException {
+		if (!this.has(position)) {
+			throw new IllegalArgumentException();
+		}
+
+		Packet p = packetList.get(position);
+		switch (this.typeColumn) {
+			case COLUMNTYPE_COLLAPSED:
+				packetList.remove(position);
+				break;
+			case COLUMNTYPE_SPARSE:
+				packetList.set(position, null);
+				break;
+			default:
+				break;
+		}
+		return p;
+	}
+
 
 }
