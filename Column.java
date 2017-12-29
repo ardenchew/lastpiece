@@ -38,6 +38,17 @@ public class Column {
 		return (position < this.packetList.size()) && (packetList.get(position) != null);
 	}
 
+	public boolean has(Packet p) {
+		Packet temp;
+		for (int i = 0; i < this.packetList.size(); i++) {
+			temp = this.packetList.get(i);
+			if (temp == p) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public int size() {
 		return this.size;
 	}
@@ -62,12 +73,29 @@ public class Column {
 			default:
 				break;
 		}
-		this.packetCount--;
+		if (p != null) {
+			this.packetCount++;
+		}
 		return p;
+	}
+
+	public Packet remove(Packet p) throws IllegalArgumentException {
+		Packet temp;
+		for (int i = 0; i < this.packetList.size(); i++) {
+			temp = this.packetList.get(i);
+			if (temp == p) {
+				return this.remove(i);
+			}
+		}
+		throw new IllegalArgumentException();
 	}
 
 	public void add(Packet p) throws IllegalArgumentException {
 		if (this.typeColumn == COLUMNTYPE.COLUMNTYPE_SPARSE) {
+			throw new IllegalArgumentException();
+		}
+
+		if (p == null) {
 			throw new IllegalArgumentException();
 		}
 
@@ -94,6 +122,10 @@ public class Column {
 			this.packetCount++;
 		}
 		return temp;
+	}
+
+	public boolean isEmpty() {
+		return (this.packetCount == 0);
 	}
 
 }

@@ -17,6 +17,14 @@ public class Board {
 		this.boardList.add(c);
 	}
 
+	public Column remove(int position) throws IllegalArgumentException {
+		if (position >= this.size()) {
+			throw new IllegalArgumentException();
+		}
+		Column c = this.boardList.remove(position);
+		return c;
+	}
+
 	public Column get(int position) throws IllegalArgumentException {
 		if (position >= this.size()) {
 			throw new IllegalArgumentException();
@@ -24,6 +32,17 @@ public class Board {
 
 		Column c = this.boardList.get(position);
 		return c;
+	}
+
+	public boolean has(Packet p) {
+		Column c;
+		for (int i = 0; i < this.size(); i++) {
+			c = this.boardList.get(i);
+			if (c.has(p)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Packet get(int columnPosition, int rowPosition) throws IllegalArgumentException {
@@ -40,6 +59,19 @@ public class Board {
 		return p;
 	}
 
+	public Packet remove(Packet p) throws IllegalArgumentException {
+		Column c;
+		for (int i = 0; i < this.size(); i++) {
+			c = this.boardList.get(i);
+			if (c.has(p)) {
+				Packet temp = c.remove(p);
+				return temp;
+			}
+		}
+		return null;
+
+	}
+
 	public void add(int columnPosition, Packet p) throws IllegalArgumentException {
 		Column c = this.get(columnPosition);
 		c.add(p);
@@ -53,6 +85,13 @@ public class Board {
 	}
 
 	public boolean isEmpty() {
-		
+		Column c;
+		for (int i = 0; i < this.size(); i++) {
+			c = this.boardList.get(i);
+			if (!c.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
