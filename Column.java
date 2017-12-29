@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 public class Column {
 	
@@ -126,6 +127,19 @@ public class Column {
 
 	public boolean isEmpty() {
 		return (this.packetCount == 0);
+	}
+
+	public Iterator<Packet> iterator() {
+		List<Packet> fullList = new ArrayList<Packet>();
+		Packet temp;
+
+		for (int i = 0; i < this.packetList.size(); i++) {
+			temp = this.packetList.get(i);
+			if (temp != null) {
+				fullList.add(temp);
+			}
+		}
+		return fullList.iterator();
 	}
 
 }
