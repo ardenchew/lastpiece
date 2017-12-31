@@ -1,4 +1,4 @@
-public class Player {
+public abstract class Player {
 	
 	public enum PLAYERTYPE {
 		POSITIVE_ONLY,
@@ -9,6 +9,8 @@ public class Player {
 	private String color;
 	private int points;
 	private PLAYERTYPE ptype;
+	private boolean hasMove;
+	private Move moveCurrent;
 
 	Player(String name, String color, PLAYERTYPE ptype) {
 		this.name = name;
@@ -17,7 +19,26 @@ public class Player {
 		this.ptype = ptype;
 	}
 
-	public int getPoints() {
+	public abstract Move getMove();
+
+	public boolean hasMove() {
+		return this.moveCurrent != NULL;
+	}
+
+	public String name() {
+		return this.name;
+	}
+
+	public String color() {
+		return this.color;
+	}
+
+	public String setColor(String newColor) {
+		this.color = newColor;
+		return this.color;
+	}
+
+	public int points() {
 		return this.points;
 	}
 
@@ -33,9 +54,51 @@ public class Player {
 	}
 
 	public int removePoint() {
-		if 
+		this.points -= 1;
+		if (this.points < 0) {
+			switch (this.ptype) {
+				case POSITIVE_ONLY:
+					this.points = 0;
+					break;
+				case NEGATIVE_POSITIVE:
+					break;
+				default:
+					break;
+			}
+		}
+		return this.points;
 	}
 
-	public int removePoints()
+	public int removePoints(int less) {
+		this.points -= less;
+		if (this.points < 0) {
+			switch (this.ptype) {
+				case POSITIVE_ONLY:
+					this.points = 0;
+					break;
+				case NEGATIVE_POSITIVE:
+					break;
+				default:
+					break;
+			}
+		}
+		return this.points;
+	}
+
+	public int setPoints(int set) {
+		this.points = set;
+		if (this.points < 0) {
+			switch (this.ptype) {
+				case POSITIVE_ONLY:
+					this.points = 0;
+					break;
+				case NEGATIVE_POSITIVE:
+					break;
+				default:
+					break;
+			}
+		}
+		return this.points;
+	}
 
 }

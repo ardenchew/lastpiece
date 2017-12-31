@@ -18,7 +18,7 @@ public class GameMaster {
 		}
 	}
 
-	
+
 
 	public Column fillEmpty(Column c) throws IllegalArgumentException {
 		if (!c.isEmpty()) {
@@ -29,4 +29,50 @@ public class GameMaster {
 		}
 		return c;
 	}
+
+
+	public void Main ()
+	{
+
+
+		while (event = UIGetEvent()) {
+			switch (event.type) {
+				case PAINT:
+					gamemaster.Paint(event);
+					break;
+
+					case TAP:
+
+
+
+
+
+			}
+
+			gamemaster.CheckForMove();
+			gamemaster.CheckGameOver();
+		}
+	}
+
+	public void CheckForMove()
+	{
+		if (this.currentPlayer.hasMove())
+		{				
+			Move move = this.currentPlayer.GetMove();
+
+		}
+	}
+
+	public boolean isMoveValid(Move move){
+
+	}
+
+	public void makeMove(Move move)
+	{
+		// check that the move is valid.  if it is, make the move and change the player.  otherwise reject
+		// change currnet player
+	}
+
+
+
 }
