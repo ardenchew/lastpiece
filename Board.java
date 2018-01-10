@@ -6,8 +6,14 @@ public class Board {
 	
 	private List<Column> boardList;
 
-	Board() {
+	Board(int[] boardSize) {
 		this.boardList = new ArrayList<Column>();
+
+		Column temp;
+		for (int i = 0; i < boardSize.length; i++) {
+			temp = new Column(boardSize[i], Column.COLUMNTYPE.COLUMNTYPE_COLLAPSED);
+			this.boardList.add(temp);
+		}
 	}
 
 	public int size() {

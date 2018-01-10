@@ -31,8 +31,9 @@ public class GameMaster {
 	}
 
 
-	public void Main ()
-	{
+	public void Main () {
+
+			
 
 
 		while (event = UIGetEvent()) {
