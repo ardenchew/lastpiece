@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class UserPlayer implements Player {
+public class UserPlayer extends Player {
 	
 	public String name;
 

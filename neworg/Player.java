@@ -1,7 +1,7 @@
-public interface Player {
+public abstract class Player {
 
-	public String getName();
+	public abstract String getName();
 
-	public Move getMove();
+	public abstract Move getMove();
 
 }
