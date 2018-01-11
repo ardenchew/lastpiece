@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import java.lang.NumberFormatException;
+
 public class PacketGameMaster {
 	
 	Move currentMove;
@@ -8,7 +10,9 @@ public class PacketGameMaster {
 	BoardView boardView;
 	ArrayList<Player> players = new ArrayList<Player>();
 	int isWhosTurn;
-	Player winner; //todo
+	Player winner; //TODO
+
+	ArrayList<Packet> removeList = new ArrayList<Packet>();
 
 	public void PacketGameMaster() {
 		this.board.reset(); //TODO
@@ -31,6 +35,7 @@ public class PacketGameMaster {
 	public void HandleInput(UserInput in) {
 		String inString = in.data;
 		String[] inStringList = inString.split(" ");
+		int[] piece;
 
 		switch (inStringList[0]) {
 			case "help": 
@@ -40,6 +45,31 @@ public class PacketGameMaster {
 				this.changeTurn();
 				this.gameOver();
 				break;
+			case "restart":
+				this.restartGame();
+				break;
+			case "board":
+				this.printBoard();
+				break;
+			case "add": //TODO
+				if (inStringList.length = 2) {
+					piece = this.convertPiece(inStringList[1]);
+					if (piece != null) {
+						if (this.board.has(piece[0], piece[1])) {
+							this.removeList.add(board.get(piece[0], piece[1]));
+						}
+					}
+				}
+			case "remove": //TODO
+				if (inStringList.length = 2) {
+					piece = this.convertPiece(inStringList[1]);
+					if (piece != null) {
+						if (this.removeList.has())
+
+					}
+				}
+			case "complete":
+				
 			default:
 				System.out.println("Invalid input");
 				break;
@@ -48,6 +78,26 @@ public class PacketGameMaster {
 
 		//deals with users input (not a full move)
 		//help, complete, restart, quit, add, remove,
+	}
+
+	private int[] convertPiece(String piece) {
+		int[] pieceInt = new int[2];
+
+		String[] firstTest = piece.split("p");
+		if (firstTest[0] != "") {
+			return null;
+		}
+		String[] secondTest = firstTest[1].split("b");
+		if (secondTest.length != 2) {
+			return null;
+		}
+		try {
+			pieceInt[0] = Integer.valueOf(secondTest[0]);
+			pieceInt[1] = Integer.valueOf(secondTest[1]);
+			return pieceInt;
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 
 	public void printHelp() {
