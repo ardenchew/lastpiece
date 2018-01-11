@@ -1,12 +1,17 @@
+import java.util.ArrayList;
+
 public class Move {
 
-	String moveStr; //should take pieces individually
+	//actual way of dealing with pieces, not the string
+	// an array of pieces to remove from the board
 
-	public Move(String s) {
-		this.moveStr = s;
+	ArrayList packetList; //list of packets to remove
+
+	public Move(ArrayList<Packet> pl) {
+		this.packetList = pl;
 	}
 
-	public String getData() {
+	public ArrayList getData() {
 		return this.moveStr;
 	}
 
