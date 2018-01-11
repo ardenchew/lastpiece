@@ -1,21 +1,26 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PacketGameMaster {
 	
 	Move currentMove;
 	Board board;
 	BoardView boardView;
-	ArrayList players = new ArrayList<Player>();
+	ArrayList<Player> players = new ArrayList<Player>();
 	int isWhosTurn;
+	Player winner; //todo
 
 	public void PacketGameMaster() {
 		this.board.reset(); //TODO
-		this.boardView.setBoar(board); //TODO
+		this.boardView.setBoard(board); //TODO
 
 		Player userPlayer = new UserPlayer("User Player 1");
 		Player computerPlayer = new ComputerPlayer("Computer Player 1");
 		this.players.add(userPlayer);
 		this.players.add(computerPlayer);
+		winner = this.players.get(1); //default for if user quits ?? should go somewhere else
+
+		this.printWelcome();
 
 	}
 
@@ -23,12 +28,85 @@ public class PacketGameMaster {
 		return move.isMoveComplete(); //this should return false as the user is building up move and return true when user is ready to provide move
 	}
 
-	public void HandleInput(Move m) {
-		isValidMove(in); //TODO
+	public void HandleInput(UserInput in) {
+		String inString = in.data;
+		String[] inStringList = inString.split(" ");
+
+		switch (inStringList[0]) {
+			case "help": 
+				this.printHelp();
+				break;
+			case "quit":
+				this.changeTurn();
+				this.gameOver();
+				break;
+			default:
+				System.out.println("Invalid input");
+				break;
+
+		}
+
 		//deals with users input (not a full move)
+		//help, complete, restart, quit, add, remove,
 	}
 
-	public boolean isValidMove(Move m)
+	public void printHelp() {
+		System.out.println("The following is a list of available commands:");
+		System.out.println(" help        - print this help page");
+		System.out.println(" quit        - quit game");
+		System.out.println(" restart     - restart game");
+		System.out.println(" add p4c2    - select piece 4 from column 2 to take");
+		System.out.println(" remove p4c2 - deselect piece 4 from column 2");
+		System.out.println(" complete    - end turn");
+		System.out.println(" board       - show board");
+	}
+
+	public boolean isValidInput(Move m) {}
+
+	public boolean isValidMove(Move m){}
+
+	public void changeTurn() {
+		this.isWhosTurn = (this.isWhosTurn + 1) % 2;
+	}
+
+	public void gameOver() {
+		Scanner sc = new Scanner(System.in);
+
+		String winner = players.get(this.isWhosTurn).getName();
+		System.out.println(winner + " wins!");
+		System.out.println("The game is over. To quit hit <enter>, otherwise input 'restart'... ");
+
+		String endString = sc.nextLine();
+		if (endString.equals("")) {
+			this.end();
+		} else {
+			this.restartGame();
+		}
+	}
+
+	private void end() {
+		//TODO
+	}
+
+	public void restartGame() {
+		this.board.reset();
+		this.board.resetBoard();
+		this.printBoard();
+	}
+
+	public void printWelcome() {
+		System.out.println("Welcome to last piece!");
+		System.out.println("The objective is to force the opposing player to take the last piece.");
+		System.out.println("Taking turns remove pieces from a single column at a time (at least one piece). \n");
+		this.printHelp();
+		System.out.println("");
+		this.printBoard();
+	}
+
+	public void printBoard() {
+		System.out.println("The current state of the board is: ");
+		System.out.println(this.boardView.getData());
+	}
 
 
 
