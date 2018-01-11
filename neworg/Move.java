@@ -6,17 +6,27 @@ public class Move {
 	// an array of pieces to remove from the board
 
 	ArrayList packetList; //list of packets to remove
+	boolean complete; // not using for now
 
 	public Move(ArrayList<Packet> pl) {
 		this.packetList = pl;
+		this.complete = true; //default setting for now
 	}
 
-	public ArrayList getData() {
-		return this.moveStr;
+	public ArrayList<Packet> getData() {
+		return this.packetList;
 	}
 
 	public boolean isMoveComplete() {
-		return false; //TODO
+		return this.complete;
+	}
+
+	public void markAsComplete() {
+		this.complete = false;
+	}
+
+	public void markAsIncomplete() {
+		this.complete = true;
 	}
 }
 
