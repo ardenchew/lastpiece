@@ -1,116 +1,74 @@
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
+import java.lang.IndexOutOfBoundsException;
 
 public class Board {
 	
-	private List<Column> boardList;
+	public ArrayList<Column> boardList;
+	public int[] boardDim;
+	public int size;
 
-	Board(int[] boardSize) {
+	Board(int[] bd) {
 		this.boardList = new ArrayList<Column>();
+		this.resize(bd);
+	}
 
-		Column temp;
-		for (int i = 0; i < boardSize.length; i++) {
-			temp = new Column(boardSize[i], Column.COLUMNTYPE.COLUMNTYPE_COLLAPSED);
+	public Column get(int position) {
+		return this.boardList.get(position);
+	}
+
+	public Column remove(int position) {
+		Column temp = this.boardList.remove(position);
+		this.size--;
+		return temp;
+	}
+
+	public boolean has(Column c) {
+		int position = c.getColumnNum();
+		return (position < this.size);
+	}
+
+	public boolean add(Column c) {
+		this.size++;
+		return this.boardList.add(c);
+	}
+
+	public void clear() {
+		this.boardList.clear();
+		this.size = 0;
+	}
+
+	public void reset() {
+		this.clear();
+		this.resize(this.boardDim);
+
+	}
+
+	public void resize(int[] bd) {
+		this.clear();
+		this.boardDim = bd;
+		this.size = this.boardDim.length;
+
+		for (int i = 0; i < this.boardDim.length; i++) {
+			Column temp = new Column(i);
+			temp.fill(this.boardDim[i]);
 			this.boardList.add(temp);
 		}
 	}
 
-	public int size() {
-		return this.boardList.size();
-	}
-
-	public void add(Column c) {
-		this.boardList.add(c);
-	}
-
-	public Column remove(int position) throws IllegalArgumentException {
-		if (position >= this.size()) {
-			throw new IllegalArgumentException();
-		}
-		Column c = this.boardList.remove(position);
-		return c;
-	}
-
-	public Column get(int position) throws IllegalArgumentException {
-		if (position >= this.size()) {
-			throw new IllegalArgumentException();
-		}
-
-		Column c = this.boardList.get(position);
-		return c;
-	}
-
-	public boolean has(Packet p) {
-		Column c;
-		for (int i = 0; i < this.size(); i++) {
-			c = this.boardList.get(i);
-			if (c.has(p)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public Packet get(int columnPosition, int rowPosition) throws IllegalArgumentException {
-		Column c = this.get(columnPosition);
-		Packet p = c.get(rowPosition);
-
-		return p;
-	}
-
-	public Packet remove(int columnPosition, int rowPosition) throws IllegalArgumentException {
-		Column c = this.get(columnPosition);
-		Packet p = c.get(rowPosition);
-		c.remove(rowPosition);
-		return p;
-	}
-
-	public Packet remove(Packet p) throws IllegalArgumentException {
-		Column c;
-		for (int i = 0; i < this.size(); i++) {
-			c = this.boardList.get(i);
-			if (c.has(p)) {
-				Packet temp = c.remove(p);
-				return temp;
-			}
-		}
-		return null;
-
-	}
-
-	public void add(int columnPosition, Packet p) throws IllegalArgumentException {
-		Column c = this.get(columnPosition);
-		c.add(p);
-	}
-
-	public Packet set(int columnPosition, int rowPosition, Packet p) throws IllegalArgumentException {
-		Column c = this.get(columnPosition);
-		Packet temp = c.get(rowPosition);
-		c.set(rowPosition, p);
-		return temp;
-	}
-
 	public boolean isEmpty() {
-		Column c;
-		for (int i = 0; i < this.size(); i++) {
-			c = this.boardList.get(i);
-			if (!c.isEmpty()) {
-				return false;
-			}
-		}
-		return true;
+		return (this.getPacketNum() == 0);
 	}
 
-	public Iterator<Column> iterator() {
-		List<Column> fullList = new ArrayList<Column>();
-		Column temp;
+	public int size() {
+		return this.size;
+	}
 
-		for (int i = 0; i < this.size(); i++) {
-			temp = this.boardList.get(i);
-			fullList.add(temp);
+	public int getPacketNum() {
+		int count = 0;
+		for (int i = 0; i < this.size; i++) {
+			count += this.get(i).getPacketCount();
 		}
-		return fullList.iterator();
+		return count;
 	}
 
 }

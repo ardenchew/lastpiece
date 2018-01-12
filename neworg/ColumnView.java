@@ -1,38 +1,38 @@
 import java.util.Iterator;
-import java.util.ArrayList;
-//import java.util.List;
 
 public class ColumnView {
 	
-	Column c;
-	String data;
+	public String key;
+	public String data;
 
-	ColumnView(Column temp) {
-		this.c = temp;
-		this.data = this.toString(this.c);
+	public ColumnView(Column c) {
+		this.key = c.getKey();
+		this.constructHelper(c);
 	}
 
-	public String toString(Column c) {
-		String s = "[";
-		Iterator<Packet> iter = this.c.iterator();
-		Packet p;
-		PacketView pv;
-		boolean editEnd = false;
+	private void constructHelper(Column c) {
+		this.data = this.key + ": [ ";
+		Iterator<Packet> iter = c.iterator();
 		while (iter.hasNext()) {
-			editEnd = true;
-			p = iter.next();
-			pv = new PacketView(p);
-			s += pv.getData() + ", ";
+			this.data += iter.next().getKey() + " ";
 		}
-		if (editEnd) {
-			s = s.substring(0, (s.length() - 2));
-		}
-		s += "]";
-		return s;
+		this.data += "]";
+	}
+
+	public String getKey() {
+		return this.key;
 	}
 
 	public String getData() {
 		return this.data;
+	}
+
+	public void view() {
+		System.out.println(this.data);
+	}
+
+	public void removeUpdate(Packet p) {
+		this.data.replace(p.getKey(), "  ");
 	}
 
 }

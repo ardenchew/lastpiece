@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
 
 // a simplified version of column
@@ -11,7 +10,7 @@ public class Column {
 	public int size;
 	public int packetCount;
 
-	public Column1(int col) {
+	public Column(int col) {
 		this.colNum = col;
 		this.key = "c" + this.colNum;
 
@@ -21,14 +20,37 @@ public class Column {
 
 	}
 
+	public boolean fill(int sz) {
+		this.clear();
+		for (int i = 0; i < sz; i++) {
+			Packet temp = new Packet(i);
+			this.add(temp);
+		}
+		return (this.size == sz);
+	}
+
+	public boolean reset() {
+		return this.fill(this.size);
+	}
+
 	public boolean add(Packet p) {
-		if this.has(p) {
+		if (this.has(p)) {
 			return false;
 		}
 		boolean addSuc = this.packetList.add(p);
 		if (addSuc) {
 			this.size = this.packetList.size();
 			this.packetCount++;
+		}
+		return addSuc;
+	}
+
+	public Packet remove(int position) {
+		Packet temp = this.packetList.set(position, null);
+		if (temp != null) {
+			this.packetCount--;
+		}
+		return temp;
 	}
 
 	public void clear() {
@@ -50,7 +72,7 @@ public class Column {
 		return this.packetList.get(position);
 	}
 
-	public boolean getKey() {
+	public String getKey() {
 		return this.key;
 	}
 
@@ -64,6 +86,20 @@ public class Column {
 
 	public int getPacketCount() {
 		return this.packetCount;
+	}
+
+	public int getColumnNum() {
+		return this.colNum;
+	}
+
+	public Iterator<Packet> iterator() {
+		ArrayList<Packet> temp = new ArrayList<Packet>();
+		for (int i = 0; i < this.size; i++) {
+			if (this.packetList.get(i) != null) {
+				temp.add(this.packetList.get(i));
+			}
+		}
+		return temp.iterator();
 	}
 
 

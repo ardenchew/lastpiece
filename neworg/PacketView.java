@@ -1,11 +1,19 @@
 public class PacketView {
 	
-	Packet p;
-	String data;
+	public String key;
+	public String data;
 
-	PacketView(Packet temp) {
-		this.p = temp;
-		this.data = this.p.getData();
+	public PacketView(Packet p) {
+		this.key = p.getKey();
+		this.data = p.getData();
+	}
+
+	public void view() {
+		System.out.print(this.data);
+	}
+
+	public String getKey() {
+		return this.key;
 	}
 
 	public String getData() {
