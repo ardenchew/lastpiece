@@ -41,6 +41,14 @@ public class Board {
 		return this.boardList.get(position).has(p);
 	}
 
+	public boolean has(int pIdx, int cIdx) {
+		try {
+			return this.boardList.get(cIdx).has(pIdx);
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+
 	public boolean add(Column c) {
 		this.size++;
 		return this.boardList.add(c);

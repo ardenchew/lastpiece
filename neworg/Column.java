@@ -68,6 +68,10 @@ public class Column {
 		return ((this.size > idx) && (this.packetList.get(idx) != null));
 	}
 
+	public boolean has(int pIdx) {
+		return ((pIdx < this.size) && (this.packetList.get(pIdx) != null));
+	}
+
 	public Packet get(int position) {
 		return this.packetList.get(position);
 	}

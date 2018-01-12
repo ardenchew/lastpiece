@@ -51,7 +51,7 @@ public class PacketGameMaster {
 			case "board":
 				this.printBoard();
 				break;
-			case "add": //TODO
+			case "add": //PACKET DATA CLASS TODO
 				if (inStringList.length = 2) {
 					piece = this.convertPiece(inStringList[1]);
 					if (piece != null) {
@@ -84,7 +84,7 @@ public class PacketGameMaster {
 		int[] pieceInt = new int[2];
 
 		String[] firstTest = piece.split("p");
-		if (firstTest[0] != "") {
+		if (!(firstTest[0].equals(""))) {
 			return null;
 		}
 		String[] secondTest = firstTest[1].split("b");
