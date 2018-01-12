@@ -102,6 +102,4 @@ public class Column {
 		return temp.iterator();
 	}
 
-
-
 }
