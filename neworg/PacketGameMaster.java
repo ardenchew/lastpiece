@@ -69,9 +69,9 @@ public class PacketGameMaster {
 					}
 				}
 			case "complete":
-				
+
 			default:
-				System.out.println("Invalid input");
+				System.out.println("Invalid input.");
 				break;
 
 		}

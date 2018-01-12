@@ -27,6 +27,20 @@ public class Board {
 		return (position < this.size);
 	}
 
+	public boolean has(Packet p) {
+		for (int i = 0; i < this.size; i++) {
+			if (this.boardList.get(i).has(p)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean has(Packet p, Column c) {
+		int position = c.getColumnNum();
+		return this.boardList.get(position).has(p);
+	}
+
 	public boolean add(Column c) {
 		this.size++;
 		return this.boardList.add(c);
