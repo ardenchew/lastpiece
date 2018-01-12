@@ -1,13 +1,29 @@
 public class Packet {
 
-	private String data;
+	public String key; //a unique identifier for each packet
+	public int pacNum;
+
 
 	public Packet() {
-		this.data = "P";
+		this.key = "P";
 	}
 
-	public String getData() {
-		return this.data;
+	public Packet(int pac) {
+		this.pacNum = pac;
+		this.key = "p" + this.pacNum;
 	}
+
+	public String getKey() {
+		return this.key;
+	}
+
+	public void setKey(String k) {
+		this.key = k;
+	}
+
+	public int getPacketNum() {
+		return this.pacNum;
+	}
+
 
 }
