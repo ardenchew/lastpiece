@@ -12,8 +12,7 @@ public class PacketGameMaster {
 	int isWhosTurn;
 	Player winner; //TODO
 
-	public void PacketGameMaster() {
-		int[] boardSize = {7, 5, 3, 1};
+	public void PacketGameMaster(int[] boardSize) {
 		this.board = new Board(boardSize);
 
 		Player userPlayer1 = new UserPlayer("User Player 1");
@@ -22,8 +21,10 @@ public class PacketGameMaster {
 		this.players.add(userPlayer2);
 		winner = this.players.get(1); //default for if user quits ?? should go somewhere else
 
-		this.printWelcome();
+	}
 
+	public Player getCurrentPlayer() {
+		return this.players.get(isWhosTurn);
 	}
 
 	public boolean HasMove() {
@@ -171,6 +172,7 @@ public class PacketGameMaster {
 		this.printHelp();
 		System.out.println("");
 		this.printBoard();
+		System.out.println("");
 	}
 
 	public void printBoard() {
