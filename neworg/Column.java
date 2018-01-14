@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
-// a simplified version of column
+// a simplified version of sparse column
 public class Column {
 	
 	public ArrayList<Packet> packetList;
@@ -9,6 +9,7 @@ public class Column {
 	public int colNum;
 	public int size;
 	public int packetCount;
+	public Packet cmpPac;
 
 	public Column(int col) {
 		this.colNum = col;
@@ -17,6 +18,8 @@ public class Column {
 		this.packetList = new ArrayList<Packet>();
 		this.packetCount = 0;
 		this.size = 0;
+
+		this.cmpPac = new Packet(0);
 
 	}
 
@@ -45,6 +48,21 @@ public class Column {
 		return addSuc;
 	}
 
+	public Packet remove(Packet p) {
+		Packet temp;
+		String remKey = p.getKey();
+		for (int i = 0; i < this.size; i++) {
+			temp = this.packetList.get(i);
+			if (temp != null) {
+				if (temp.getKey() == remKey) {
+					this.remove(i);
+					return temp;
+				}
+			}
+		}
+		return null;
+	}
+
 	public Packet remove(int position) {
 		Packet temp = this.packetList.set(position, null);
 		if (temp != null) {
@@ -64,8 +82,17 @@ public class Column {
 	}
 
 	public boolean has(Packet p) {
-		int idx = p.getPacketNum();
-		return ((this.size > idx) && (this.packetList.get(idx) != null));
+		Packet temp;
+		String hasKey = p.getKey();
+		for (int i = 0; i < this.size; i++) {
+			temp = this.packetList.get(i);
+			if (temp != null) {
+				if (temp.getKey() == hasKey) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean has(int pIdx) {

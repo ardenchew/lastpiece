@@ -22,14 +22,14 @@ public class Board {
 		return temp;
 	}
 
-	public boolean has(Column c) {
-		int position = c.getColumnNum();
-		return (position < this.size);
+	public boolean has(int cIdx) {
+		return (cIdx < this.size);
 	}
 
-	public boolean has(Packet p) {
-		for (int i = 0; i < this.size; i++) {
-			if (this.boardList.get(i).has(p)) {
+	public boolean has(Column c) {
+		String hasKey = c.getKey();
+		for (int i =0; i < this.size; i++) {
+			if (this.boardList.get(i).getKey() == hasKey) {
 				return true;
 			}
 		}
@@ -37,16 +37,7 @@ public class Board {
 	}
 
 	public boolean has(Packet p, Column c) {
-		int position = c.getColumnNum();
-		return this.boardList.get(position).has(p);
-	}
-
-	public boolean has(int pIdx, int cIdx) {
-		try {
-			return this.boardList.get(cIdx).has(pIdx);
-		} catch (IndexOutOfBoundsException e) {
-			return false;
-		}
+		return c.has(p);
 	}
 
 	public boolean add(Column c) {

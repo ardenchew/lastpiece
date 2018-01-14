@@ -3,11 +3,6 @@ public class Packet {
 	public String key; //a unique identifier for each packet
 	public int pacNum;
 
-
-	public Packet() {
-		this.key = "P";
-	}
-
 	public Packet(int pac) {
 		this.pacNum = pac;
 		this.key = "p" + this.pacNum;
