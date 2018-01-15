@@ -16,39 +16,31 @@ public class Board {
 		return this.boardList.get(position);
 	}
 
-	public Column remove(int position) {
-		Column temp = this.boardList.remove(position);
+	public Column remove(int cIdx) {
+		Column temp = this.boardList.remove(cIdx);
 		this.size--;
 		return temp;
 	}
 
-	public Packet remove(Packet p, Column c) {
-		String colKey = c.getKey();
-		for (int i = 0; i < this.size; i++) {
-			if (this.boardList.get(i).getKey() == colKey) {
-				Packet retPacket = this.boardList.get(i).remove(p);
-				return p;
-			}
+	public Packet remove(int pIdx, int cIdx) {
+		if (cIdx < this.size) {
+			return this.boardList.get(cIdx).remove(pIdx);
 		}
 		return null;
 	}
 
-	public boolean has(int cIdx) {
-		return (cIdx < this.size);
+	public Packet get(int pIdx, int cIdx) {
+		if (cIdx < this.size) {
+			return this.boardList.get(cIdx).get(pIdx);
+		}
+		return null;
 	}
 
-	public boolean has(Column c) {
-		String hasKey = c.getKey();
-		for (int i =0; i < this.size; i++) {
-			if (this.boardList.get(i).getKey() == hasKey) {
-				return true;
-			}
+	public boolean has(int pIdx, int cIdx) {
+		if (cIdx < this.size) {
+			return this.boardList.get(cIdx).has(pIdx);
 		}
 		return false;
-	}
-
-	public boolean has(Packet p, Column c) {
-		return c.has(p);
 	}
 
 	public boolean add(Column c) {

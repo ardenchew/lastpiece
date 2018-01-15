@@ -2,25 +2,19 @@ import java.util.Iterator;
 
 public class ColumnView {
 	
-	public String key;
 	public String data;
 
 	public ColumnView(Column c) {
-		this.key = c.getKey();
 		this.constructHelper(c);
 	}
 
 	private void constructHelper(Column c) {
-		this.data = this.key + ": [ ";
+		this.data = c.getKey() + ": [ ";
 		Iterator<Packet> iter = c.iterator();
 		while (iter.hasNext()) {
 			this.data += iter.next().getKey() + " ";
 		}
 		this.data += "]";
-	}
-
-	public String getKey() {
-		return this.key;
 	}
 
 	public String getData() {
@@ -31,8 +25,9 @@ public class ColumnView {
 		System.out.println(this.data);
 	}
 
-	public void removeUpdate(Packet p) {
-		this.data.replace(p.getKey(), "  ");
+	public void removeUpdate(int pIdx) {
+		String remPac = "p" + pIdx;
+		this.data.replace(remPac, "  ");
 	}
 
 }

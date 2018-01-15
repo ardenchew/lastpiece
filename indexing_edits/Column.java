@@ -27,6 +27,8 @@ public class Column {
 		this.clear();
 		for (int i = 0; i < sz; i++) {
 			Packet temp = new Packet(i);
+			temp.packetData.setColumnNum(this.colNum);
+			temp.packetData.setPacketNum(i);
 			this.add(temp);
 		}
 		return (this.size == sz);
@@ -37,9 +39,6 @@ public class Column {
 	}
 
 	public boolean add(Packet p) {
-		if (this.has(p)) {
-			return false;
-		}
 		boolean addSuc = this.packetList.add(p);
 		if (addSuc) {
 			this.size = this.packetList.size();
@@ -48,23 +47,12 @@ public class Column {
 		return addSuc;
 	}
 
-	public Packet remove(Packet p) {
-		Packet temp;
-		String remKey = p.getKey();
-		for (int i = 0; i < this.size; i++) {
-			temp = this.packetList.get(i);
-			if (temp != null) {
-				if (temp.getKey() == remKey) {
-					this.remove(i);
-					return temp;
-				}
-			}
+	public Packet remove(int pIdx) {
+		if (pIdx >= this.size) {
+			System.err.println("Index out of bounds.");
+			return null;
 		}
-		return null;
-	}
-
-	public Packet remove(int position) {
-		Packet temp = this.packetList.set(position, null);
+		Packet temp = this.packetList.set(pIdx, null);
 		if (temp != null) {
 			this.packetCount--;
 		}
@@ -81,26 +69,12 @@ public class Column {
 		return (this.packetCount == 0);
 	}
 
-	public boolean has(Packet p) {
-		Packet temp;
-		String hasKey = p.getKey();
-		for (int i = 0; i < this.size; i++) {
-			temp = this.packetList.get(i);
-			if (temp != null) {
-				if (temp.getKey() == hasKey) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	public boolean has(int pIdx) {
 		return ((pIdx < this.size) && (this.packetList.get(pIdx) != null));
 	}
 
-	public Packet get(int position) {
-		return this.packetList.get(position);
+	public Packet get(int pIdx) {
+		return this.packetList.get(pIdx);
 	}
 
 	public String getKey() {

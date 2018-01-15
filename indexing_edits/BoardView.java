@@ -19,15 +19,8 @@ public class BoardView {
 		}
 	}
 
-	public void removeUpdate(Column c, Packet p) {
-		ColumnView temp;
-		for (int i = 0; i < this.board.size(); i++) {
-			temp = this.board.get(i);
-			if (temp.getKey() == c.getKey()) {
-				temp.removeUpdate(p);
-				return;
-			}
-		}
+	public void removeUpdate(int cIdx, int pIdx) {
+		this.board.get(cIdx).removeUpdate(pIdx);
 	}
 
 

@@ -4,8 +4,7 @@ public class Packet {
 	public PacketData packetData;
 
 	public Packet(int pac) {
-		this.pacNum = pac;
-		this.key = "p" + this.pacNum;
+		this.key = "p" + pac;
 	}
 
 	public String getKey() {
@@ -14,10 +13,6 @@ public class Packet {
 
 	public void setKey(String k) {
 		this.key = k;
-	}
-
-	public int getPacketNum() {
-		return this.pacNum;
 	}
 
 }
