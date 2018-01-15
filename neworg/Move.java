@@ -6,14 +6,28 @@ public class Move {
 	// an array of pieces to remove from the board
 
 	ArrayList<Packet> packetList; //list of packets to remove
-	boolean complete; // not using for now
+	boolean complete;
 	int itemCount;
 	Column currentColumn;
 
 
 	public Move() {
 		this.packetList = new ArrayList<Packet>();
-		this.complete = false; //default setting for now
+		this.complete = false;
+		this.itemCount = 0;
+	}
+
+	public Column getColumn() {
+		return this.currentColumn;
+	}
+
+	public ArrayList<Packet> getPackets() {
+		return this.packetList;
+	}
+
+	public void reset() {
+		this.packetList.clear();
+		this.complete = false;
 		this.itemCount = 0;
 	}
 

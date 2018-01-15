@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import java.lang.NumberFormatException;
 
@@ -11,9 +10,11 @@ public class PacketGameMaster {
 	ArrayList<Player> players = new ArrayList<Player>();
 	int isWhosTurn;
 	Player winner; //TODO
+	boolean isGameOver;
 
 	public void PacketGameMaster(int[] boardSize) {
 		this.board = new Board(boardSize);
+		this.isGameOver = false;
 
 		Player userPlayer1 = new UserPlayer("User Player 1");
 		Player userPlayer2 = new ComputerPlayer("User Player 2");
@@ -27,14 +28,20 @@ public class PacketGameMaster {
 		return this.players.get(isWhosTurn);
 	}
 
-	public boolean HasMove() {
+	public boolean isGameOver() {
+		return this.isGameOver;
+	}
+
+	public boolean hasMove() {
 		return this.currentMove.isMoveComplete(); //this should return false as the user is building up move and return true when user is ready to provide move
 	}
 
-	public void HandleInput(UserInput in) {
+	public void handleInput(UserInput in) {
+		String currentPlayerName = this.getCurrentPlayer().getName();
+		System.out.println(currentPlayerName + ": ");
+
 		String inString = in.data;
 		String[] inStringList = inString.split(" ");
-		int[] piece;
 
 		switch (inStringList[0]) {
 			case "help": 
@@ -50,7 +57,7 @@ public class PacketGameMaster {
 			case "board":
 				this.printBoard();
 				break;
-			case "add": //PACKET DATA CLASS TODO
+			case "add": 
 				if (inStringList.length == 2) {
 					Column tempColumn;
 					Packet tempPacket;
@@ -67,7 +74,7 @@ public class PacketGameMaster {
 						}
 					}
 				}
-			case "remove": //TODO
+			case "remove":
 				if (inStringList.length == 2) {
 					Column tempColumn;
 					Packet tempPacket;
@@ -86,6 +93,10 @@ public class PacketGameMaster {
 				}
 			case "complete":
 				if (this.currentMove.markAsComplete()) {
+					this.boardView = this.board.handleMove(this.currentMove, this.boardView);
+					this.changeTurn();
+					this.currentMove.reset()
+					this.checkGameOver();
 					break;
 				}
 			case "selected": 
@@ -99,6 +110,16 @@ public class PacketGameMaster {
 
 		//deals with users input (not a full move)
 		//help, complete, restart, quit, add, remove,
+	}
+
+	public void handleMove(Move m) {
+		if (this.m.isComplete()) {
+			Column removalColumn = m.getColumn();
+			ArrayList<Packets> removalPacketList = m.getPackets();
+			for (int i = 0; i < removalPacketList.size(); i++) {
+				this.board.remove(removalPacketList.get(i), removalColumn);
+			}
+		}
 	}
 
 	private int[] convertPiece(String piece) {
@@ -141,28 +162,25 @@ public class PacketGameMaster {
 		this.isWhosTurn = (this.isWhosTurn + 1) % 2;
 	}
 
-	public void gameOver() {
-		Scanner sc = new Scanner(System.in);
+	public void printWinner() {
+		System.out.println(this.winner.getName() + " wins!")
+	}
 
-		String winner = players.get(this.isWhosTurn).getName();
-		System.out.println(winner + " wins!");
-		System.out.println("The game is over. To quit hit <enter>, otherwise input 'restart'... ");
-
-		String endString = sc.nextLine();
-		if (endString.equals("")) {
-			this.end();
-		} else {
-			this.restartGame();
+	public void checkGameOver() {
+		if (this.board.size == 0) {
+			this.printWinner();
+			this.gameOver();
 		}
 	}
 
-	private void end() {
-		//TODO
+	public void gameOver() {
+		this.isGameOver = true;
 	}
 
 	public void restartGame() {
 		this.board.reset();
 		this.printBoard();
+		this.isGameOver = false;
 	}
 
 	public void printWelcome() {

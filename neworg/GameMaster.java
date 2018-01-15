@@ -18,13 +18,17 @@ public class GameMaster {
 
 			switch(in.type) {
 				case UserInput.USERINPUTTYPE.USERINPUT_GAMECOMMAND:
-
+					this.game.handleInput(in);
+				case UserInput.USERINPUTTYPE.USERINPUT_APPCOMMAND:
+					this.handleAppCommand(in);
+				default:
+					break;
 			}
-
-			
 		}
+	}
 
-
+	public void restart() {
+		return; //TODO
 	}
 
 	public UserInput getUserInput() {
@@ -37,7 +41,7 @@ public class GameMaster {
 		return this.game.isGameOver();
 	}
 
-	public void HandleAppCommand(UserInput in) {
+	public void handleAppCommand(UserInput in) {
 		return; //TODO
 	}
 
