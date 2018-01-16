@@ -12,8 +12,9 @@ public class PacketGameMaster {
 	public Player winner; //TODO
 	public boolean isGameOver;
 
-	public void PacketGameMaster(int[] boardSize, ArrayList<Player> playerList) {
+	public PacketGameMaster(int[] boardSize, ArrayList<Player> playerList) {
 		this.board = new Board(boardSize);
+		this.boardView = new BoardView(this.board);
 		this.isGameOver = false;
 		this.players = playerList;
 
@@ -160,7 +161,7 @@ public class PacketGameMaster {
 		System.out.println(" remove p4c2 - deselect piece 4 from column 2");
 		System.out.println(" complete    - end turn");
 		System.out.println(" board       - show board");
-		System.out.println(" selected       - show pieces selected");
+		System.out.println(" selected    - show pieces selected");
 	}
 
 	public void changeTurn() {
@@ -184,18 +185,18 @@ public class PacketGameMaster {
 
 	public void restartGame() {
 		this.board.reset();
+		this.boardView.reset(this.board);
 		this.printBoard();
 		this.isGameOver = false;
 	}
 
 	public void printWelcome() {
-		System.out.println("Welcome to last piece!");
+		System.out.println("\nWelcome to last piece!");
 		System.out.println("The objective is to force the opposing player to take the last piece.");
-		System.out.println("Taking turns remove pieces from a single column at a time (at least one piece). \n");
+		System.out.println("Taking turns, remove pieces from a single column at a time (at least one piece). \n");
 		this.printHelp();
 		System.out.println("");
 		this.printBoard();
-		System.out.println("");
 	}
 
 	public void printBoard() {

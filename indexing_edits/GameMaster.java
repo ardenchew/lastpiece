@@ -14,7 +14,7 @@ public class GameMaster {
 		while (!(game.isGameOver())) {
 
 			if (game.getCurrentPlayer() instanceof UserPlayer) {
-				System.out.print(game.getCurrentPlayer().getName() + ": ");
+				System.out.print("\n" + game.getCurrentPlayer().getName() + ": ");
 			}
 
 			Input in = game.getCurrentPlayer().getInput();
@@ -24,16 +24,13 @@ public class GameMaster {
 				case CPUINPUT_GAMECOMMAND:
 					game.handleInput(in);
 					break;
-				case USERINPUT_APPCOMMAND:
-					handleAppCommand(in);
-					break;
 				default:
 					break;
 			}
 		}
 	}
 
-	public static void checkRestart() {
+	public static boolean checkRestart() {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.print("To restart the game input 'restart', otherwise hit <enter>: ");
@@ -41,9 +38,9 @@ public class GameMaster {
 		toRestart = toRestart.toLowerCase();
 		toRestart = toRestart.replace(" ", "");
 		if (toRestart.equals("restart")) {
-			restartGame = true;
+			return true;
 		} else {
-			restartGame = false;
+			return false;
 		}
 	}
 

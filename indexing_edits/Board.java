@@ -64,7 +64,7 @@ public class Board {
 		this.boardDim = bd;
 		this.size = this.boardDim.length;
 
-		for (int i = 0; i < this.boardDim.length; i++) {
+		for (int i = 0; i < this.size; i++) {
 			Column temp = new Column(i);
 			temp.fill(this.boardDim[i]);
 			this.boardList.add(temp);

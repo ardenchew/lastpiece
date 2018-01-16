@@ -1,7 +1,7 @@
 public class Packet {
 
 	public String key; //a unique identifier for each packet
-	public PacketData packetData;
+	public PacketData packetData = new PacketData();
 
 	public Packet(int pac) {
 		this.key = "p" + pac;

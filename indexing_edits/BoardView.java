@@ -23,5 +23,14 @@ public class BoardView {
 		this.board.get(cIdx).removeUpdate(pIdx);
 	}
 
+	public void reset(Board b) {
+		this.board.clear();
+		int size = b.size();
+		for (int i = 0; i < size; i++) {
+			ColumnView temp = new ColumnView(b.get(i));
+			this.board.add(temp);
+		}
+	}
+
 
 }
