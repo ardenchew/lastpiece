@@ -10,8 +10,9 @@ public class ComputerPlayer extends Player {
 		return this.name;
 	}
 
-	public Move getMove() {
-		return new Move("temp"); //TODO
+	public Input getInput() {
+		Move m = new Move();
+		return new Input(Input.INPUTTYPE.CPUINPUT_GAMECOMMAND, m); //TODO
 	}
 
 }

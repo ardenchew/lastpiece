@@ -14,21 +14,12 @@ public class UserPlayer extends Player {
 	}
 
 	@Override
-	public Move getMove() {
+	public Input getInput() {
 		Scanner sc = new Scanner(System.in);
 		String moveStr = sc.nextLine();
-		Move mv = new Move(moveStr);
+		Input ip = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, moveStr);
 
-		while (!this.isValidMove(mv)) {
-			System.out.println("Not a valid move, try again: ");
-			mv = this.getMove();
-		}
-
-		return mv;
-	}
-
-	public boolean isValidMove(Move mv) {
-		return true; //TODO
+		return ip;
 	}
 
 }

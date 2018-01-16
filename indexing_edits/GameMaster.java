@@ -1,47 +1,62 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class GameMaster {
 
-	public Scanner sc = new Scanner(System.in);
-	public PacketGameMaster game;
+	public static void main(String[] args) {
 
-	public void main(String[] args) {
+		ArrayList<Player> players = setPlayers();
 
 		int[] boardSize = {7, 5, 3, 1};
-		this.game = new PacketGameMaster(boardSize);
-		this.game.printWelcome();
+		PacketGameMaster game = new PacketGameMaster(boardSize, players);
+		game.printWelcome();
 
-		while (!(this.checkGameOver())) {
+		while (!(game.isGameOver())) {
 
-			System.out.print(this.game.getCurrentPlayer().getName() + ": ");
-			UserInput in = this.getUserInput();
+			if (game.getCurrentPlayer() instanceof UserPlayer) {
+				System.out.print(game.getCurrentPlayer().getName() + ": ");
+			}
+
+			Input in = game.getCurrentPlayer().getInput();
 
 			switch(in.type) {
-				case UserInput.USERINPUTTYPE.USERINPUT_GAMECOMMAND:
-					this.game.handleInput(in);
-				case UserInput.USERINPUTTYPE.USERINPUT_APPCOMMAND:
-					this.handleAppCommand(in);
+				case USERINPUT_GAMECOMMAND:
+				case CPUINPUT_GAMECOMMAND:
+					game.handleInput(in);
+					break;
+				case USERINPUT_APPCOMMAND:
+					handleAppCommand(in);
+					break;
 				default:
 					break;
 			}
 		}
 	}
 
-	public void restart() {
-		return; //TODO
+	public static void checkRestart() {
+		Scanner sc = new Scanner(System.in);
+
+		System.out.print("To restart the game input 'restart', otherwise hit <enter>: ");
+		String toRestart = sc.nextLine();
+		toRestart = toRestart.toLowerCase();
+		toRestart = toRestart.replace(" ", "");
+		if (toRestart.equals("restart")) {
+			restartGame = true;
+		} else {
+			restartGame = false;
+		}
 	}
 
-	public UserInput getUserInput() {
-		String in = this.sc.nextLine();
-		UserInput ui = new UserInput(UserInput.INPUTTYPE.USERINPUT_GAMECOMMAND, in);
-		return ui;
+	public static ArrayList<Player> setPlayers() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		Player userPlayer1 = new UserPlayer("User Player 1");  //TODO PLAYER ADJUSTMENT
+		Player userPlayer2 = new UserPlayer("User Player 2"); //TODO PLAYER ADJUSTMENT
+		players.add(userPlayer1); //TODO PLAYER ADJUSTMENT
+		players.add(userPlayer2); //TODO PLAYER ADJUSTMENT	
+		return players;
 	}
 
-	public boolean checkGameOver() {
-		return this.game.isGameOver();
-	}
-
-	public void handleAppCommand(UserInput in) {
+	public static void handleAppCommand(Input in) {
 		return; //TODO
 	}
 

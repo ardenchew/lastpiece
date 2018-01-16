@@ -4,27 +4,24 @@ import java.lang.NumberFormatException;
 
 public class PacketGameMaster {
 	
-	Move currentMove;
-	Board board;
-	BoardView boardView;
-	ArrayList<Player> players = new ArrayList<Player>();
-	int isWhosTurn;
-	Player winner; //TODO
-	boolean isGameOver;
+	public Move currentMove;
+	public Board board;
+	public BoardView boardView;
+	public ArrayList<Player> players; //TODO PLAYER ADJUSTMENT
+	public int isWhosTurn;
+	public Player winner; //TODO
+	public boolean isGameOver;
 
-	public void PacketGameMaster(int[] boardSize) {
+	public void PacketGameMaster(int[] boardSize, ArrayList<Player> playerList) {
 		this.board = new Board(boardSize);
 		this.isGameOver = false;
+		this.players = playerList;
 
-		Player userPlayer1 = new UserPlayer("User Player 1");
-		Player userPlayer2 = new ComputerPlayer("User Player 2");
-		this.players.add(userPlayer1);
-		this.players.add(userPlayer2);
 		winner = this.players.get(1); //default for if user quits ?? should go somewhere else
 
 	}
 
-	public Player getCurrentPlayer() {
+	public Player getCurrentPlayer() { //TODO PLAYER ADJUSTMENT
 		return this.players.get(isWhosTurn);
 	}
 
@@ -36,10 +33,22 @@ public class PacketGameMaster {
 		return this.currentMove.isMoveComplete(); //this should return false as the user is building up move and return true when user is ready to provide move
 	}
 
-	public void handleInput(UserInput in) {
-		String currentPlayerName = this.getCurrentPlayer().getName();
-		System.out.println(currentPlayerName + ": ");
+	public void handleInput(Input in) {
+		switch (in.type) {
+			case USERINPUT_GAMECOMMAND:
+				this.handleUserInput(in);
+				break;
+			case CPUINPUT_GAMECOMMAND:
+				this.handleCpuInput(in);
+				break;
+		}
+	}
 
+	public void handleCpuInput(Input in) {
+		this.completeMove(in.move);
+	}
+
+	public void handleUserInput(Input in) {
 		String inString = in.data;
 		String[] inStringList = inString.split(" ");
 
@@ -59,44 +68,33 @@ public class PacketGameMaster {
 				break;
 			case "add": 
 				if (inStringList.length == 2) {
-					Column tempColumn;
-					Packet tempPacket;
 					int[] addPiece = this.convertPiece(inStringList[1]);
 					if (addPiece != null) {
-						if (this.board.has(addPiece[1])) {
-							tempColumn = this.board.get(addPiece[1]);
-							if (tempColumn.has(addPiece[0])) {
-								tempPacket = tempColumn.get(addPiece[0]);
-								if (this.currentMove.add(tempPacket, tempColumn)) {
-									break;
-								}
+						int pIdx = addPiece[0];
+						int cIdx = addPiece[1];
+						if (this.board.has(pIdx, cIdx)) {
+							if(this.currentMove.add(pIdx, cIdx)) {
+								break;
 							}
 						}
 					}
 				}
 			case "remove":
 				if (inStringList.length == 2) {
-					Column tempColumn;
-					Packet tempPacket;
 					int[] remPiece = this.convertPiece(inStringList[1]);
 					if (remPiece != null) {
-						if (this.board.has(remPiece[1])) {
-							tempColumn = this.board.get(remPiece[1]);
-							if (tempColumn.has(remPiece[0])) {
-								tempPacket = tempColumn.get(remPiece[0]);
-								if (this.currentMove.remove(tempPacket, tempColumn)) {
-									break;
-								}
+						int pIdx = remPiece[0];
+						int cIdx = remPiece[1];
+						if (this.board.has(pIdx, cIdx)) {
+							if (this.currentMove.remove(pIdx, cIdx)) {
+								break;
 							}
 						}
 					}
 				}
 			case "complete":
 				if (this.currentMove.markAsComplete()) {
-					this.boardView = this.board.handleMove(this.currentMove, this.boardView);
-					this.changeTurn();
-					this.currentMove.reset()
-					this.checkGameOver();
+					this.completeMove(this.currentMove);
 					break;
 				}
 			case "selected": 
@@ -112,13 +110,24 @@ public class PacketGameMaster {
 		//help, complete, restart, quit, add, remove,
 	}
 
+	public void completeMove(Move m) { //for a computer player use as well
+		this.handleMove(m);
+		this.printBoard();
+		this.changeTurn();
+		this.currentMove.reset();
+		this.checkGameOver();
+	}
+
 	public void handleMove(Move m) {
-		if (this.m.isComplete()) {
-			Column removalColumn = m.getColumn();
-			ArrayList<Packets> removalPacketList = m.getPackets();
-			for (int i = 0; i < removalPacketList.size(); i++) {
-				this.board.remove(removalPacketList.get(i), removalColumn);
+		if (m.isMoveComplete()) {
+			int cIdx = m.getColumnNum();
+			ArrayList<Integer> removalPacketList = m.getPacketIdx();
+			for (int pIdx = 0; pIdx < removalPacketList.size(); pIdx++) {
+				this.board.remove(pIdx, cIdx);
+				this.boardView.removeUpdate(pIdx, cIdx);
 			}
+		} else {
+			System.err.println("Move is incomplete.");
 		}
 	}
 
@@ -154,16 +163,12 @@ public class PacketGameMaster {
 		System.out.println(" selected       - show pieces selected");
 	}
 
-	public boolean isValidInput(Move m) {}
-
-	public boolean isValidMove(Move m){}
-
 	public void changeTurn() {
 		this.isWhosTurn = (this.isWhosTurn + 1) % 2;
 	}
 
 	public void printWinner() {
-		System.out.println(this.winner.getName() + " wins!")
+		System.out.println(this.winner.getName() + " wins!");
 	}
 
 	public void checkGameOver() {

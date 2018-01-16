@@ -32,7 +32,7 @@ public class Move {
 	}
 
 	public boolean add(int pIdx, int cIdx) {
-		if (this.has(pIdx, cIdx)) {
+		if (this.valid(pIdx, cIdx)) {
 			if (this.itemCount == 0) {
 				this.currentColumn = cIdx;
 			}
@@ -43,7 +43,7 @@ public class Move {
 		return false;
 	}
 
-	public boolean has(int pIdx, int cIdx) {
+	public boolean valid(int pIdx, int cIdx) {
 		if (this.packetList.indexOf(pIdx) != -1) {
 			return false;
 		}
@@ -54,7 +54,7 @@ public class Move {
 	}
 
 	public boolean remove(int pIdx, int cIdx) {
-		if (this.has(pIdx, cIdx)) {
+		if (this.valid(pIdx, cIdx)) {
 			this.packetList.remove(this.packetList.indexOf(pIdx));
 			this.itemCount--;
 			return true;

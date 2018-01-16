@@ -19,7 +19,7 @@ public class BoardView {
 		}
 	}
 
-	public void removeUpdate(int cIdx, int pIdx) {
+	public void removeUpdate(int pIdx, int cIdx) {
 		this.board.get(cIdx).removeUpdate(pIdx);
 	}
 
