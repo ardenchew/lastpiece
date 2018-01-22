@@ -20,7 +20,15 @@ public class BoardView {
 	}
 
 	public void removeUpdate(int pIdx, int cIdx) {
-		this.board.get(cIdx).removeUpdate(pIdx);
+		ColumnView temp = this.board.get(cIdx);
+		temp.removeUpdate(pIdx);
+		this.board.set(cIdx, temp);
+		System.out.println("AHHAHA");
+	}
+
+	public void removeUpdate(int cIdx, Board b) {
+		ColumnView temp = new ColumnView(b.get(cIdx));
+		this.board.set(cIdx, temp);
 	}
 
 	public void reset(Board b) {

@@ -17,6 +17,7 @@ public class PacketGameMaster {
 		this.boardView = new BoardView(this.board);
 		this.isGameOver = false;
 		this.players = playerList;
+		this.currentMove = new Move();
 
 		winner = this.players.get(1); //default for if user quits ?? should go somewhere else
 
@@ -74,12 +75,14 @@ public class PacketGameMaster {
 						int pIdx = addPiece[0];
 						int cIdx = addPiece[1];
 						if (this.board.has(pIdx, cIdx)) {
-							if(this.currentMove.add(pIdx, cIdx)) {
+							if (this.currentMove.add(pIdx, cIdx)) {
 								break;
 							}
 						}
 					}
 				}
+				System.out.println("Invalid input.");
+				break;
 			case "remove":
 				if (inStringList.length == 2) {
 					int[] remPiece = this.convertPiece(inStringList[1]);
@@ -93,11 +96,15 @@ public class PacketGameMaster {
 						}
 					}
 				}
+				System.out.println("Invalid input.");
+				break;
 			case "complete":
 				if (this.currentMove.markAsComplete()) {
 					this.completeMove(this.currentMove);
 					break;
 				}
+				System.out.println("Invalid input.");
+				break;
 			case "selected": 
 				System.out.println(this.currentMove.toString());
 				break;
@@ -113,10 +120,10 @@ public class PacketGameMaster {
 
 	public void completeMove(Move m) { //for a computer player use as well
 		this.handleMove(m);
-		this.printBoard();
-		this.changeTurn();
 		this.currentMove.reset();
+		this.changeTurn();
 		this.checkGameOver();
+		this.printBoard();
 	}
 
 	public void handleMove(Move m) {
@@ -125,7 +132,7 @@ public class PacketGameMaster {
 			ArrayList<Integer> removalPacketList = m.getPacketIdx();
 			for (int pIdx = 0; pIdx < removalPacketList.size(); pIdx++) {
 				this.board.remove(pIdx, cIdx);
-				this.boardView.removeUpdate(pIdx, cIdx);
+				this.boardView.removeUpdate(cIdx, this.board);
 			}
 		} else {
 			System.err.println("Move is incomplete.");
@@ -139,7 +146,7 @@ public class PacketGameMaster {
 		if (!(firstTest[0].equals(""))) {
 			return null;
 		}
-		String[] secondTest = firstTest[1].split("b");
+		String[] secondTest = firstTest[1].split("c");
 		if (secondTest.length != 2) {
 			return null;
 		}
@@ -173,7 +180,7 @@ public class PacketGameMaster {
 	}
 
 	public void checkGameOver() {
-		if (this.board.size == 0) {
+		if (this.board.getPacketNum() == 0) {
 			this.printWinner();
 			this.gameOver();
 		}

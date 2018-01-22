@@ -32,7 +32,7 @@ public class Move {
 	}
 
 	public boolean add(int pIdx, int cIdx) {
-		if (this.valid(pIdx, cIdx)) {
+		if (this.validAdd(pIdx, cIdx)) {
 			if (this.itemCount == 0) {
 				this.currentColumn = cIdx;
 			}
@@ -43,7 +43,7 @@ public class Move {
 		return false;
 	}
 
-	public boolean valid(int pIdx, int cIdx) {
+	public boolean validAdd(int pIdx, int cIdx) {
 		if (this.packetList.indexOf(pIdx) != -1) {
 			return false;
 		}
@@ -54,12 +54,22 @@ public class Move {
 	}
 
 	public boolean remove(int pIdx, int cIdx) {
-		if (this.valid(pIdx, cIdx)) {
+		if (this.validRemove(pIdx, cIdx)) {
 			this.packetList.remove(this.packetList.indexOf(pIdx));
 			this.itemCount--;
 			return true;
 		}
 		return false;
+	}
+
+	public boolean validRemove(int pIdx, int cIdx) {
+		if (this.packetList.indexOf(pIdx) == -1) {
+			return false;
+		}
+		if (cIdx != this.currentColumn) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean isMoveComplete() {
@@ -71,13 +81,13 @@ public class Move {
 			System.out.println("No pieces selected");
 			return false;
 		} else {
-			this.complete = false;
+			this.complete = true;
 			return true;
 		}
 	}
 
 	public void markAsIncomplete() {
-		this.complete = true;
+		this.complete = false;
 	}
 
 	public String toString() {

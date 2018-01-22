@@ -1,4 +1,4 @@
-import java.util.Iterator;
+import java.util.ArrayList;
 
 public class ColumnView {
 	
@@ -10,9 +10,12 @@ public class ColumnView {
 
 	private void constructHelper(Column c) {
 		this.data = c.getKey() + ": [ ";
-		Iterator<Packet> iter = c.iterator();
-		while (iter.hasNext()) {
-			this.data += iter.next().getKey() + " ";
+		for (int i = 0; i < c.getSize(); i++) {
+			if (c.get(i) != null) {
+				this.data += c.get(i).getKey() + " ";
+			} else {
+				this.data += "   ";
+			}
 		}
 		this.data += "]";
 	}

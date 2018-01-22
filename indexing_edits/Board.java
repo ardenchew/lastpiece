@@ -24,7 +24,10 @@ public class Board {
 
 	public Packet remove(int pIdx, int cIdx) {
 		if (cIdx < this.size) {
-			return this.boardList.get(cIdx).remove(pIdx);
+			Column temp = this.boardList.get(cIdx);
+			Packet tempRet = temp.remove(pIdx);
+			this.boardList.set(cIdx, temp);
+			return tempRet;
 		}
 		return null;
 	}
