@@ -123,14 +123,18 @@ public class PacketGameMaster {
 		this.currentMove.reset();
 		this.changeTurn();
 		this.checkGameOver();
-		this.printBoard();
+		if (!this.isGameOver) {
+			this.printBoard();
+		}
 	}
 
 	public void handleMove(Move m) {
 		if (m.isMoveComplete()) {
 			int cIdx = m.getColumnNum();
 			ArrayList<Integer> removalPacketList = m.getPacketIdx();
-			for (int pIdx = 0; pIdx < removalPacketList.size(); pIdx++) {
+			int pIdx;
+			for (int i = 0; i < removalPacketList.size(); i++) {
+				pIdx = removalPacketList.get(i);
 				this.board.remove(pIdx, cIdx);
 				this.boardView.removeUpdate(cIdx, this.board);
 			}
