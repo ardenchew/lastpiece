@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Last Piece</string>
+    <string name="title_activity_game2">GameActivity2</string>
+    <string name="restart">Restart</string>
+    <string name="resetScore">Reset Score</string>
+    <string name="endGame">End Game</string>
+    <string name="killCpu">Kill CPU</string>
 </resources>

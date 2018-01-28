@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context="io.github.ardenchew.lastpiece.MainActivity" >
+
+    <item
+        android:id="@+id/restart"
+        android:title="@string/restart"
+        app:showAsAction="always"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        tools:icon="@drawable/mr_button_light" />
+    <item
+        android:id="@+id/resetScore"
+        android:title="@string/resetScore"
+        app:showAsAction="always"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        tools:icon="@drawable/mr_button_light" />
+    <item
+        android:id="@+id/endGame"
+        android:title="@string/endGame"
+        app:showAsAction="always"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        tools:icon="@drawable/mr_button_light" />
+    <item
+        android:id="@+id/killCpu"
+        android:title="@string/killCpu"
+        app:showAsAction="always"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        tools:icon="@drawable/mr_button_light" />
+
+
+</menu>
