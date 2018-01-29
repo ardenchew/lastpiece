@@ -1,7 +1,6 @@
 package io.github.ardenchew.lastpiece;
 
 import java.util.ArrayList;
-import java.lang.IndexOutOfBoundsException;
 
 public class Board {
 

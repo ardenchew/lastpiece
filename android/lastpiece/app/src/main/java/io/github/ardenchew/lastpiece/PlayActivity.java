@@ -18,7 +18,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), GameActivity.class);
-                //TODO pass player data to game activity set up
+                startIntent.putExtra("io.github.ardenchew.lastpiece.multi", "Player 2");
                 startActivity(startIntent);
             }
         });
@@ -28,7 +28,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent startIntent = new Intent(getApplicationContext(), GameActivity.class);
-                //TODO pass player data to game activity set up
+                startIntent.putExtra("io.github.ardenchew.lastpiece.single", "Computer");
                 startActivity(startIntent);
 
             }

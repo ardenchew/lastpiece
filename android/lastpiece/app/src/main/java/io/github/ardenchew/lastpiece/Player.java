@@ -6,4 +6,10 @@ public abstract class Player {
 
     public abstract Input getInput();
 
+    public abstract int getPoints();
+
+    public abstract void addPoint();
+
+    public abstract void resetPoints();
+
 }

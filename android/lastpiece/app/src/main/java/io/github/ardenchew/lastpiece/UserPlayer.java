@@ -5,9 +5,11 @@ import java.util.Scanner;
 public class UserPlayer extends Player {
 
     public String name;
+    public int points;
 
     public UserPlayer(String n) {
         this.name = n;
+        this.points = 0;
     }
 
     @Override
@@ -22,6 +24,18 @@ public class UserPlayer extends Player {
         Input ip = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, moveStr);
 
         return ip;
+    }
+
+    public int getPoints() {
+        return this.points;
+    }
+
+    public void addPoint() {
+        this.points += 1;
+    }
+
+    public void resetPoints() {
+        this.points = 0;
     }
 
 }

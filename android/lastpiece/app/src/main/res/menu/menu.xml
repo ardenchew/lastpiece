@@ -2,7 +2,7 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context="io.github.ardenchew.lastpiece.MainActivity" >
+    tools:context="io.github.ardenchew.lastpiece.GameActivity" >
 
     <item
         android:id="@+id/restart"
