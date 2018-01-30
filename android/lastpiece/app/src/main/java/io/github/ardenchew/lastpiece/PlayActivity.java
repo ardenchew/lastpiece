@@ -17,7 +17,7 @@ public class PlayActivity extends AppCompatActivity {
         multiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), GameActivity.class);
+                Intent startIntent = new Intent(getApplicationContext(), Game2Activity.class);
                 startIntent.putExtra("io.github.ardenchew.lastpiece.multi", "Player 2");
                 startActivity(startIntent);
             }

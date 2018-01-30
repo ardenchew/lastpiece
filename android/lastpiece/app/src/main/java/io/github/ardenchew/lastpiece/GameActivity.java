@@ -19,9 +19,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public Input in;
     public int[] boardSize = {7, 5, 3, 1};
     public ArrayList<Player> players = new ArrayList<Player>();
-    public ArrayList<Button> btnList = getButtons();
-    public Button completeBtn = (Button) findViewById(R.id.completeBtn);
+    public ArrayList<Button> btnList;
+    public Button completeBtn;
     public PacketGameMaster game;
+
     public String[] btnStrList;
     public boolean restart;
 
@@ -50,39 +51,39 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         playerOne.setText(this.players.get(0).getName());
         playerTwo.setText(this.players.get(1).getName());
 
+        getButtons();
+        this.completeBtn = (Button) findViewById(R.id.completeBtn);
         this.btnStrList = new String[]{"p0c0", "p1c0", "p2c0", "p3c0", "p4c0", "p5c0", "p6c0", "p0c1", "p1c1", "p2c1", "p3c1", "p4c1", "p0c2", "p1c2", "p2c2", "p0c3"};
         TextView score = (TextView) findViewById(R.id.score);
         this.game = new PacketGameMaster(this.boardSize, players);
         score.setText(this.game.getScore());
 
-        this.restart = true;
+        //this.restart = true;
 
-        while(this.restart) {
-            while (!game.isGameOver()) {
-                if (game.isWhosTurn == 0) {
-                    playerOne.setHighlightColor(Color.parseColor("#219be5"));
-                    playerTwo.setHighlightColor(Color.parseColor("#ffffff"));
-                } else {
-                    playerOne.setHighlightColor(Color.parseColor("#ffffff"));
-                    playerTwo.setHighlightColor(Color.parseColor("#219be5"));
-                }
-
-                if (game.getCurrentPlayer() instanceof UserPlayer) {
-                    this.completeBtn.setOnClickListener(this);
-                    for (int i = 0; i < this.btnList.size(); i++) {
-                        this.btnList.get(i).setOnClickListener(this);
-                    }
-                } else if (game.getCurrentPlayer() instanceof ComputerPlayer) {
-                    //TODO
-                    //Make sure to update board view
-                }
-                Board boardView = this.game.getBoard();
-                Move moveView = this.game.getMove();
-                updateBoard(boardView, moveView);
+        while (!game.isGameOver()) {
+            if (game.isWhosTurn == 0) {
+                playerOne.setHighlightColor(Color.parseColor("#219be5"));
+                playerTwo.setHighlightColor(Color.parseColor("#ffffff"));
+            } else {
+                playerOne.setHighlightColor(Color.parseColor("#ffffff"));
+                playerTwo.setHighlightColor(Color.parseColor("#219be5"));
             }
-            score.setText(this.game.getScore());
-            String winner = this.game.winner.getName();
+
+            if (game.getCurrentPlayer() instanceof UserPlayer) {
+                this.completeBtn.setOnClickListener(this);
+                for (int i = 0; i < this.btnList.size(); i++) {
+                    this.btnList.get(i).setOnClickListener(this);
+                }
+            } else if (game.getCurrentPlayer() instanceof ComputerPlayer) {
+                //TODO
+                //Make sure to update board view
+            }
+            Board boardView = this.game.getBoard();
+            Move moveView = this.game.getMove();
+            updateBoard(boardView, moveView);
         }
+        score.setText(this.game.getScore());
+        String winner = this.game.winner.getName();
     }
 
     public void updateBoard(Board bv, Move mv) {
@@ -199,25 +200,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.game.handleInput(this.in);
     }
 
-    public ArrayList<Button> getButtons() {
-        ArrayList<Button> btnList = new ArrayList<Button>();
-        btnList.add((Button) findViewById(R.id.button1));
-        btnList.add((Button) findViewById(R.id.button2));
-        btnList.add((Button) findViewById(R.id.button3));
-        btnList.add((Button) findViewById(R.id.button4));
-        btnList.add((Button) findViewById(R.id.button5));
-        btnList.add((Button) findViewById(R.id.button6));
-        btnList.add((Button) findViewById(R.id.button7));
-        btnList.add((Button) findViewById(R.id.button8));
-        btnList.add((Button) findViewById(R.id.button9));
-        btnList.add((Button) findViewById(R.id.button10));
-        btnList.add((Button) findViewById(R.id.button11));
-        btnList.add((Button) findViewById(R.id.button12));
-        btnList.add((Button) findViewById(R.id.button13));
-        btnList.add((Button) findViewById(R.id.button14));
-        btnList.add((Button) findViewById(R.id.button15));
-
-        return btnList;
+    public void getButtons() {
+        this.btnList = new ArrayList<Button>();
+        this.btnList.add((Button) findViewById(R.id.button1));
+        this.btnList.add((Button) findViewById(R.id.button2));
+        this.btnList.add((Button) findViewById(R.id.button3));
+        this.btnList.add((Button) findViewById(R.id.button4));
+        this.btnList.add((Button) findViewById(R.id.button5));
+        this.btnList.add((Button) findViewById(R.id.button6));
+        this.btnList.add((Button) findViewById(R.id.button7));
+        this.btnList.add((Button) findViewById(R.id.button8));
+        this.btnList.add((Button) findViewById(R.id.button9));
+        this.btnList.add((Button) findViewById(R.id.button10));
+        this.btnList.add((Button) findViewById(R.id.button11));
+        this.btnList.add((Button) findViewById(R.id.button12));
+        this.btnList.add((Button) findViewById(R.id.button13));
+        this.btnList.add((Button) findViewById(R.id.button14));
+        this.btnList.add((Button) findViewById(R.id.button15));
     }
 
     @Override
@@ -252,6 +251,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             this.isGameOver = false;
             this.players = playerList;
             this.currentMove = new Move();
+            this.isWhosTurn = 0;
 
             winner = this.players.get(1); //default for if user quits ?? should go somewhere else
 

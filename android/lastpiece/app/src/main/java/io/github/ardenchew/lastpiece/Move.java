@@ -80,7 +80,6 @@ public class Move {
 
     public boolean markAsComplete() {
         if (this.itemCount == 0) {
-            System.out.println("No pieces selected");
             return false;
         } else {
             this.complete = true;
