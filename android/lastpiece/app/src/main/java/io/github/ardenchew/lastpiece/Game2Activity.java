@@ -40,6 +40,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
         this.setButtonList();
         this.setPlayerList();
         this.completeButton = (Button) findViewById(R.id.completeBtn);
+        this.completeButton.setOnClickListener(this);
         this.score = (TextView) findViewById(R.id.score);
 
         this.game = new PacketGameMaster(this.boardSize, this.playerList);
@@ -74,6 +75,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
         this.buttonList.add((Button) findViewById(R.id.button13));
         this.buttonList.add((Button) findViewById(R.id.button14));
         this.buttonList.add((Button) findViewById(R.id.button15));
+        this.buttonList.add((Button) findViewById(R.id.button16));
     }
 
     public void setPlayerList() {
@@ -364,7 +366,11 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
         }
 
         public void handleMove(Move m) {
-            //TODO
+            int cIdx = m.getColumnNum();
+            ArrayList<Integer> pIdxLst = m.getPacketIdx();
+            for (int i = 0; i < pIdxLst.size(); i++) {
+                this.board.remove(pIdxLst.get(i), cIdx);
+            }
         }
 
         public void changeTurn() {
