@@ -36,11 +36,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         this.setBoardSize();
         this.setButtonStrList();
@@ -58,8 +53,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.game = new PacketGameMaster(this.boardSize, this.playerList);
 
         this.updateBoardView();
-
     }
+
 
     public void showEndMsg(String winner) {
         this.endMsg.setVisibility(View.VISIBLE);
