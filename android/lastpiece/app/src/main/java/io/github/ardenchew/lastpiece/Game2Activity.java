@@ -1,5 +1,6 @@
 package io.github.ardenchew.lastpiece;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,12 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
 
     public Button completeButton;
 
+    public TextView endMsg; //TODO
+    public Button restartButton;
+    public Button quitButton;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +50,36 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
         this.completeButton.setOnClickListener(this);
         this.score = (TextView) findViewById(R.id.score);
 
+        this.endMsg = (TextView) findViewById(R.id.endMsg);
+        this.restartButton = (Button) findViewById(R.id.restartButton);
+        this.quitButton = (Button) findViewById(R.id.quitButton);
+        this.hideEndMsg();
+
         this.game = new PacketGameMaster(this.boardSize, this.playerList);
 
         this.updateBoardView();
 
+    }
+
+    public void showEndMsg(String winner) {
+        this.endMsg.setVisibility(View.VISIBLE);
+        this.restartButton.setVisibility(View.VISIBLE);
+        this.quitButton.setVisibility(View.VISIBLE);
+
+        this.restartButton.setOnClickListener(this);
+        this.quitButton.setOnClickListener(this);
+
+        String s = winner + " wins!";
+        this.endMsg.setText(s);
+    }
+
+    public void hideEndMsg() {
+        this.endMsg.setVisibility(View.GONE);
+        this.restartButton.setVisibility(View.GONE);
+        this.quitButton.setVisibility(View.GONE);
+
+        this.restartButton.setOnClickListener(null);
+        this.quitButton.setOnClickListener(null);
     }
 
 
@@ -151,6 +184,17 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
             case R.id.completeBtn:
                 in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, "complete");
                 break;
+            case R.id.restartButton:
+                this.game.restart();
+                this.hideEndMsg();
+                this.updateBoardView();
+                return;
+            case R.id.quitButton:
+                this.game.restart();
+                this.hideEndMsg();
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(startIntent);
+                return;
             default:
                 in = new Input(Input.INPUTTYPE.USERINPUT_APPCOMMAND);
                 break;
@@ -161,8 +205,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
             //TODO create computer player move
         }
         if (this.game.isGameOver()) {
-            //TODO
-            this.game.restart();
+            this.showEndMsg(this.game.winner.getName());
         }
     }
 
@@ -222,11 +265,14 @@ public class Game2Activity extends AppCompatActivity implements View.OnClickList
             int[] r = this.boardIdxHelperFrom(i);
             if (!b.has(r[0], r[1])) {
                 this.buttonList.get(i).setOnClickListener(null);
-                this.buttonList.get(i).setBackgroundColor(Color.parseColor("#ffffff"));
+                this.buttonList.get(i).setVisibility(View.GONE);
+                //this.buttonList.get(i).setBackgroundColor(Color.parseColor("#ffffff"));
             } else if ((r[1] == cIdx) && (pIdxLst.indexOf(r[0]) != -1)) {
+                this.buttonList.get(i).setVisibility(View.VISIBLE);
                 this.buttonList.get(i).setBackgroundColor(Color.parseColor("#219be5"));
                 this.buttonList.get(i).setOnClickListener(this);
             } else {
+                this.buttonList.get(i).setVisibility(View.VISIBLE);
                 this.buttonList.get(i).setBackgroundResource(android.R.drawable.btn_default);
                 this.buttonList.get(i).setOnClickListener(this);
             }

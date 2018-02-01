@@ -270,5 +270,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05" />
 
+    <TextView
+        android:id="@+id/endMsg"
+        android:layout_width="247dp"
+        android:layout_height="126dp"
+        android:background="#303F9F"
+        android:text="TextView"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.39" />
+
+    <Button
+        android:id="@+id/restartButton"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:text="Restart"
+        app:layout_constraintStart_toStartOf="@+id/button3"
+        app:layout_constraintTop_toBottomOf="@+id/endMsg" />
+
+    <Button
+        android:id="@+id/quitButton"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+        android:text="Quit"
+        app:layout_constraintEnd_toEndOf="@+id/endMsg"
+        app:layout_constraintTop_toBottomOf="@+id/endMsg" />
+
+
 
 </android.support.constraint.ConstraintLayout>

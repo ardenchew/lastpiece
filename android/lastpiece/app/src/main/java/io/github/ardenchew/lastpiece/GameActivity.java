@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,15 +13,24 @@ import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public Input in;
-    public int[] boardSize = {7, 5, 3, 1};
-    public ArrayList<Player> players = new ArrayList<Player>();
-    public ArrayList<Button> btnList;
-    public Button completeBtn;
     public PacketGameMaster game;
 
-    public String[] btnStrList;
-    public boolean restart;
+    public int[] boardSize;
+    public ArrayList<Player> playerList = new ArrayList<Player>();
+    public String[] buttonStrList;
+    public ArrayList<Button> buttonList = new ArrayList<Button>();
+
+    public TextView playerOne;
+    public TextView playerTwo;
+    public TextView score;
+
+    public Button completeButton;
+
+    public TextView endMsg; //TODO
+    public Button restartButton;
+    public Button quitButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,205 +42,249 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
 
+        this.setBoardSize();
+        this.setButtonStrList();
+        this.setButtonList();
+        this.setPlayerList();
+        this.completeButton = (Button) findViewById(R.id.completeBtn);
+        this.completeButton.setOnClickListener(this);
+        this.score = (TextView) findViewById(R.id.score);
+
+        this.endMsg = (TextView) findViewById(R.id.endMsg);
+        this.restartButton = (Button) findViewById(R.id.restartButton);
+        this.quitButton = (Button) findViewById(R.id.quitButton);
+        this.hideEndMsg();
+
+        this.game = new PacketGameMaster(this.boardSize, this.playerList);
+
+        this.updateBoardView();
+
+    }
+
+    public void showEndMsg(String winner) {
+        this.endMsg.setVisibility(View.VISIBLE);
+        this.restartButton.setVisibility(View.VISIBLE);
+        this.quitButton.setVisibility(View.VISIBLE);
+
+        this.restartButton.setOnClickListener(this);
+        this.quitButton.setOnClickListener(this);
+
+        String s = winner + " wins!";
+        this.endMsg.setText(s);
+    }
+
+    public void hideEndMsg() {
+        this.endMsg.setVisibility(View.GONE);
+        this.restartButton.setVisibility(View.GONE);
+        this.quitButton.setVisibility(View.GONE);
+
+        this.restartButton.setOnClickListener(null);
+        this.quitButton.setOnClickListener(null);
+    }
+
+
+
+    public void setBoardSize() {
+        this.boardSize = new int[]{7, 5, 3, 1};
+    }
+
+    public void setButtonStrList() {
+        this.buttonStrList = new String[]{"p0c0", "p1c0", "p2c0", "p3c0", "p4c0", "p5c0", "p6c0", "p0c1", "p1c1", "p2c1", "p3c1", "p4c1", "p0c2", "p1c2", "p2c2", "p0c3"};
+    }
+
+    public void setButtonList() {
+        this.buttonList.add((Button) findViewById(R.id.button1));
+        this.buttonList.add((Button) findViewById(R.id.button2));
+        this.buttonList.add((Button) findViewById(R.id.button3));
+        this.buttonList.add((Button) findViewById(R.id.button4));
+        this.buttonList.add((Button) findViewById(R.id.button5));
+        this.buttonList.add((Button) findViewById(R.id.button6));
+        this.buttonList.add((Button) findViewById(R.id.button7));
+        this.buttonList.add((Button) findViewById(R.id.button8));
+        this.buttonList.add((Button) findViewById(R.id.button9));
+        this.buttonList.add((Button) findViewById(R.id.button10));
+        this.buttonList.add((Button) findViewById(R.id.button11));
+        this.buttonList.add((Button) findViewById(R.id.button12));
+        this.buttonList.add((Button) findViewById(R.id.button13));
+        this.buttonList.add((Button) findViewById(R.id.button14));
+        this.buttonList.add((Button) findViewById(R.id.button15));
+        this.buttonList.add((Button) findViewById(R.id.button16));
+    }
+
+    public void setPlayerList() {
         Player userPlayer1 = new UserPlayer("Player 1");
-        this.players.add(userPlayer1);
+        this.playerList.add(userPlayer1);
         if (getIntent().hasExtra("io.github.ardenchew.lastpiece.multi")) {
             Player userPlayer2 = new UserPlayer(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.multi"));
-            this.players.add(userPlayer2);
+            this.playerList.add(userPlayer2);
         } else if (getIntent().hasExtra("io.github.ardenchew.lastpiece.single")) {
             Player computerPlayer1 = new ComputerPlayer(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.single"));
-            this.players.add(computerPlayer1);
+            this.playerList.add(computerPlayer1);
         }
 
-        TextView playerOne = (TextView) findViewById(R.id.playerOne);
-        TextView playerTwo = (TextView) findViewById(R.id.playerTwo);
-        playerOne.setText(this.players.get(0).getName());
-        playerTwo.setText(this.players.get(1).getName());
+        this.playerOne = (TextView) findViewById(R.id.playerOne);
+        this.playerTwo = (TextView) findViewById(R.id.playerTwo);
+        playerOne.setText(this.playerList.get(0).getName());
+        playerTwo.setText(this.playerList.get(1).getName());
 
-        getButtons();
-        this.completeBtn = (Button) findViewById(R.id.completeBtn);
-        this.btnStrList = new String[]{"p0c0", "p1c0", "p2c0", "p3c0", "p4c0", "p5c0", "p6c0", "p0c1", "p1c1", "p2c1", "p3c1", "p4c1", "p0c2", "p1c2", "p2c2", "p0c3"};
-        TextView score = (TextView) findViewById(R.id.score);
-        this.game = new PacketGameMaster(this.boardSize, players);
-        score.setText(this.game.getScore());
-
-        //this.restart = true;
-
-        while (!game.isGameOver()) {
-            if (game.isWhosTurn == 0) {
-                playerOne.setHighlightColor(Color.parseColor("#219be5"));
-                playerTwo.setHighlightColor(Color.parseColor("#ffffff"));
-            } else {
-                playerOne.setHighlightColor(Color.parseColor("#ffffff"));
-                playerTwo.setHighlightColor(Color.parseColor("#219be5"));
-            }
-
-            if (game.getCurrentPlayer() instanceof UserPlayer) {
-                this.completeBtn.setOnClickListener(this);
-                for (int i = 0; i < this.btnList.size(); i++) {
-                    this.btnList.get(i).setOnClickListener(this);
-                }
-            } else if (game.getCurrentPlayer() instanceof ComputerPlayer) {
-                //TODO
-                //Make sure to update board view
-            }
-            Board boardView = this.game.getBoard();
-            Move moveView = this.game.getMove();
-            updateBoard(boardView, moveView);
-        }
-        score.setText(this.game.getScore());
-        String winner = this.game.winner.getName();
-    }
-
-    public void updateBoard(Board bv, Move mv) {
-        int[] idx;
-        for (int i = 0; i < this.btnStrList.length; i++) {
-            idx = convertPiece(this.btnStrList[i]);
-            if (!bv.has(idx[0], idx[1])) {
-                this.btnList.get(i).setOnClickListener(null);
-                this.btnList.get(i).setBackgroundColor(Color.parseColor("#ffffff"));
-            }
-        }
-        if ((bv.getPacketNum() != 0) && (mv.itemCount != 0)) {
-            this.completeBtn.setBackgroundColor(Color.parseColor("#91df8a"));
-        } else {
-            this.completeBtn.setBackgroundResource(android.R.drawable.btn_default);
-        }
-
-        int cIdx = mv.getColumnNum();
-        ArrayList<Integer> pIdx = mv.getPacketIdx();
-        int btnIdx;
-        for (int i = 0; i < pIdx.size(); i++) {
-            btnIdx = getButtonNum(pIdx.get(i), cIdx);
-            this.btnList.get(btnIdx).setBackgroundColor(Color.parseColor("#219be5"));
-        }
-    }
-
-    public int getButtonNum(int pIdx, int cIdx) {
-        int btnNum = pIdx;
-        if (cIdx == 1) {
-            btnNum += 7;
-        } else if (cIdx == 2) {
-            btnNum += 12;
-        } else if (cIdx == 3) {
-            btnNum += 15;
-        }
-        return btnNum;
-    }
-
-    public int[] convertPiece(String piece) {
-        int[] pieceInt = new int[2];
-
-        String[] firstTest = piece.split("p");
-        if (!(firstTest[0].equals(""))) {
-            return null;
-        }
-        String[] secondTest = firstTest[1].split("c");
-        if (secondTest.length != 2) {
-            return null;
-        }
-        try {
-            pieceInt[0] = Integer.valueOf(secondTest[0]);
-            pieceInt[1] = Integer.valueOf(secondTest[1]);
-            return pieceInt;
-        } catch (NumberFormatException e) {
-            return null;
-        }
     }
 
     @Override
     public void onClick(View v) {
+        Input in;
         switch (v.getId()) {
             case R.id.button1:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[0]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[0]);
                 break;
             case R.id.button2:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[1]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[1]);
                 break;
             case R.id.button3:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[2]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[2]);
                 break;
             case R.id.button4:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[3]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[3]);
                 break;
             case R.id.button5:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[4]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[4]);
                 break;
             case R.id.button6:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[5]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[5]);
                 break;
             case R.id.button7:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[6]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[6]);
                 break;
             case R.id.button8:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[7]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[7]);
                 break;
             case R.id.button9:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[8]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[8]);
                 break;
             case R.id.button10:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[9]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[9]);
                 break;
             case R.id.button11:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[10]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[10]);
                 break;
             case R.id.button12:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[11]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[11]);
                 break;
             case R.id.button13:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[12]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[12]);
                 break;
             case R.id.button14:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[13]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[13]);
                 break;
             case R.id.button15:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[14]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[14]);
                 break;
             case R.id.button16:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.btnStrList[15]);
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, this.buttonStrList[15]);
                 break;
             case R.id.completeBtn:
-                this.in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, "complete");
+                in = new Input(Input.INPUTTYPE.USERINPUT_GAMECOMMAND, "complete");
+                break;
+            case R.id.restartButton:
+                this.game.restart();
+                this.hideEndMsg();
+                this.updateBoardView();
+                return;
+            case R.id.quitButton:
+                this.game.restart();
+                this.hideEndMsg();
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(startIntent);
+                return;
+            default:
+                in = new Input(Input.INPUTTYPE.USERINPUT_APPCOMMAND);
                 break;
         }
-        this.game.handleInput(this.in);
-    }
-
-    public void getButtons() {
-        this.btnList = new ArrayList<Button>();
-        this.btnList.add((Button) findViewById(R.id.button1));
-        this.btnList.add((Button) findViewById(R.id.button2));
-        this.btnList.add((Button) findViewById(R.id.button3));
-        this.btnList.add((Button) findViewById(R.id.button4));
-        this.btnList.add((Button) findViewById(R.id.button5));
-        this.btnList.add((Button) findViewById(R.id.button6));
-        this.btnList.add((Button) findViewById(R.id.button7));
-        this.btnList.add((Button) findViewById(R.id.button8));
-        this.btnList.add((Button) findViewById(R.id.button9));
-        this.btnList.add((Button) findViewById(R.id.button10));
-        this.btnList.add((Button) findViewById(R.id.button11));
-        this.btnList.add((Button) findViewById(R.id.button12));
-        this.btnList.add((Button) findViewById(R.id.button13));
-        this.btnList.add((Button) findViewById(R.id.button14));
-        this.btnList.add((Button) findViewById(R.id.button15));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            //TODO
+        this.game.handleInput(in);
+        this.updateBoardView();
+        if (this.game.getCurrentPlayer() instanceof ComputerPlayer) {
+            //TODO create computer player move
         }
-        return true;
+        if (this.game.isGameOver()) {
+            this.showEndMsg(this.game.winner.getName());
+        }
     }
 
-    //public String updateScore(PacketGameMaster game) {}
+    private int boardIdxHelperTo(int pIdx, int cIdx) {
+        int r = pIdx;
+        switch (cIdx) {
+            case 0:
+                return r;
+            case 1:
+                return (r + 7);
+            case 2:
+                return (r + 12);
+            case 3:
+                return 15;
+            default:
+                return -1;
+        }
+    }
+
+    private int[] boardIdxHelperFrom(int idx) {
+        int[] r = new int[2];
+        if (idx < 7) {
+            r[0] = idx;
+            r[1] = 0;
+        } else if (idx < 12) {
+            r[0] = idx - 7;
+            r[1] = 1;
+        } else if (idx < 15) {
+            r[0] = idx - 12;
+            r[1] = 2;
+        } else if (idx == 15) {
+            r[0] = 0;
+            r[1] = 3;
+        } else {
+            return null;
+        }
+        return r;
+    }
+
+    public void updateBoardView() {
+        Move m = this.game.getMove();
+        Board b = this.game.getBoard();
+        int cIdx = m.getColumnNum();
+        ArrayList<Integer> pIdxLst = m.getPacketIdx();
+
+        if (this.game.getCurrentPlayerInt() == 0) {
+            this.playerOne.setTextColor(Color.parseColor("#219be5"));
+            this.playerTwo.setTextColor(Color.parseColor("#000000"));
+        } else {
+            this.playerOne.setTextColor(Color.parseColor("#000000"));
+            this.playerTwo.setTextColor(Color.parseColor("#219be5"));
+        }
+
+        this.score.setText(this.game.getScore());
+
+        for (int i = 0; i < this.buttonList.size(); i++) {
+            int[] r = this.boardIdxHelperFrom(i);
+            if (!b.has(r[0], r[1])) {
+                this.buttonList.get(i).setOnClickListener(null);
+                this.buttonList.get(i).setVisibility(View.GONE);
+                //this.buttonList.get(i).setBackgroundColor(Color.parseColor("#ffffff"));
+            } else if ((r[1] == cIdx) && (pIdxLst.indexOf(r[0]) != -1)) {
+                this.buttonList.get(i).setVisibility(View.VISIBLE);
+                this.buttonList.get(i).setBackgroundColor(Color.parseColor("#219be5"));
+                this.buttonList.get(i).setOnClickListener(this);
+            } else {
+                this.buttonList.get(i).setVisibility(View.VISIBLE);
+                this.buttonList.get(i).setBackgroundResource(android.R.drawable.btn_default);
+                this.buttonList.get(i).setOnClickListener(this);
+            }
+        }
+
+        if (pIdxLst.size() == 0) {
+            this.completeButton.setBackgroundResource(android.R.drawable.btn_default);
+        } else {
+            this.completeButton.setBackgroundColor(Color.parseColor("#a0d2a4"));
+        }
+    }
+
 
     public class PacketGameMaster {
 
@@ -245,16 +295,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         public Player winner; //TODO
         public boolean isGameOver;
 
-
         public PacketGameMaster(int[] boardSize, ArrayList<Player> playerList) {
             this.board = new Board(boardSize);
             this.isGameOver = false;
             this.players = playerList;
             this.currentMove = new Move();
             this.isWhosTurn = 0;
+        }
 
-            winner = this.players.get(1); //default for if user quits ?? should go somewhere else
-
+        public String getScore() {
+            return (this.players.get(0).getPoints() + "-" + this.players.get(1).getPoints());
         }
 
         public Board getBoard() {
@@ -265,20 +315,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             return this.currentMove;
         }
 
-        public String getScore(){
-            return (this.players.get(0).getPoints() + "-" + this.players.get(1).getPoints());
+        public Player getCurrentPlayer() {
+            return this.players.get(this.isWhosTurn);
         }
 
-        public Player getCurrentPlayer() { //TODO PLAYER ADJUSTMENT
-            return this.players.get(isWhosTurn);
+        public int getCurrentPlayerInt() {
+            return this.isWhosTurn;
         }
 
         public boolean isGameOver() {
             return this.isGameOver;
-        }
-
-        public boolean hasMove() {
-            return this.currentMove.isMoveComplete(); //this should return false as the user is building up move and return true when user is ready to provide move
         }
 
         public void handleInput(Input in) {
@@ -297,9 +343,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         public void handleUserInput(Input in) {
-            String inString = in.data;
+            String inStr = in.data;
 
-            int[] piece = this.convertPiece(inString);
+
+            int[] piece = this.convertPiece(inStr);
             if (piece != null) {
                 int pIdx = piece[0];
                 int cIdx = piece[1];
@@ -311,59 +358,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 } else {
                     this.toastError();
+                    return;
                 }
-            } else {
-                switch (inString) {
-                    case "reset":
-                        this.players.get(0).resetPoints();
-                        this.players.get(1).resetPoints();
-                    case "restart":
-                        this.restartGame();
+            }
+            switch (inStr) {
+                case "complete":
+                    if (this.currentMove.markAsComplete()) {
+                        this.completeMove(this.currentMove);
                         break;
-                    case "quit":
-                        Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(startIntent);
-                    case "complete":
-                        if (this.currentMove.markAsComplete()) {
-                            this.completeMove(this.currentMove);
-                            break;
-                        }
+                    } else {
                         this.toastError();
                         break;
-                    default:
-                        this.toastError();
-                        break;
-                }
+                    }
+                case "restart":
+                    // TODO;
+                    this.restart();
+                    break;
+                default:
+                    this.toastError();
+                    break;
             }
         }
 
         public void toastError() {
             Toast.makeText(GameActivity.this, "Invalid Input", Toast.LENGTH_LONG).show();
-        }
-
-        public void completeMove(Move m) { //for a computer player use as well
-            this.handleMove(m);
-            this.currentMove.reset();
-            this.changeTurn();
-            this.checkGameOver();
-            if (!this.isGameOver) {
-                this.winner = this.getCurrentPlayer();
-                this.players.get(this.isWhosTurn).addPoint();
-            }
-        }
-
-        public void handleMove(Move m) {
-            if (m.isMoveComplete()) {
-                int cIdx = m.getColumnNum();
-                ArrayList<Integer> removalPacketList = m.getPacketIdx();
-                int pIdx;
-                for (int i = 0; i < removalPacketList.size(); i++) {
-                    pIdx = removalPacketList.get(i);
-                    this.board.remove(pIdx, cIdx);
-                }
-            } else {
-                toastError();
-            }
         }
 
         private int[] convertPiece(String piece) {
@@ -386,6 +404,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
+        public void completeMove(Move m) { //for a computer player use as well
+            this.handleMove(m);
+            this.currentMove.reset();
+            this.changeTurn();
+            this.checkGameOver();
+        }
+
+        public void handleMove(Move m) {
+            int cIdx = m.getColumnNum();
+            ArrayList<Integer> pIdxLst = m.getPacketIdx();
+            for (int i = 0; i < pIdxLst.size(); i++) {
+                this.board.remove(pIdxLst.get(i), cIdx);
+            }
+        }
 
         public void changeTurn() {
             this.isWhosTurn = (this.isWhosTurn + 1) % 2;
@@ -398,15 +430,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         public void gameOver() {
+            this.winner = this.getCurrentPlayer();
+            this.players.get(this.isWhosTurn).addPoint();
             this.isGameOver = true;
         }
 
-        public void restartGame() {
+        public void restart() {
             this.board.reset();
-            this.currentMove = new Move();
             this.isGameOver = false;
+            this.currentMove = new Move();
         }
-
 
     }
 }
