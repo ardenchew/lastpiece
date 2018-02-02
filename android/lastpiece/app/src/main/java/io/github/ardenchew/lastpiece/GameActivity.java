@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +24,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public TextView playerOne;
     public TextView playerTwo;
     public TextView score;
+    public ImageView playerImg1;
+    public ImageView playerImg2;
 
     public Button completeButton;
 
     public TextView endMsg; //TODO
     public Button restartButton;
     public Button quitButton;
+
+    public String playerColor;
 
 
 
@@ -44,6 +49,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.completeButton = (Button) findViewById(R.id.completeBtn);
         this.completeButton.setOnClickListener(this);
         this.score = (TextView) findViewById(R.id.score);
+        this.playerImg1 = (ImageView) findViewById(R.id.playerImg1);
+        this.playerImg2 = (ImageView) findViewById(R.id.playerImg2);
 
         this.endMsg = (TextView) findViewById(R.id.endMsg);
         this.restartButton = (Button) findViewById(R.id.restartButton);
@@ -247,11 +254,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<Integer> pIdxLst = m.getPacketIdx();
 
         if (this.game.getCurrentPlayerInt() == 0) {
-            this.playerOne.setTextColor(Color.parseColor("#219be5"));
+            this.playerColor = "#219be5";
+            this.playerImg1.setVisibility(View.VISIBLE);
+            this.playerImg2.setVisibility(View.GONE);
+            this.playerOne.setTextColor(Color.parseColor(this.playerColor));
             this.playerTwo.setTextColor(Color.parseColor("#000000"));
         } else {
+            this.playerColor = "#57ab22";
+            this.playerImg1.setVisibility(View.GONE);
+            this.playerImg2.setVisibility(View.VISIBLE);
             this.playerOne.setTextColor(Color.parseColor("#000000"));
-            this.playerTwo.setTextColor(Color.parseColor("#219be5"));
+            this.playerTwo.setTextColor(Color.parseColor(this.playerColor));
         }
 
         this.score.setText(this.game.getScore());
@@ -264,7 +277,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 //this.buttonList.get(i).setBackgroundColor(Color.parseColor("#ffffff"));
             } else if ((r[1] == cIdx) && (pIdxLst.indexOf(r[0]) != -1)) {
                 this.buttonList.get(i).setVisibility(View.VISIBLE);
-                this.buttonList.get(i).setBackgroundColor(Color.parseColor("#219be5"));
+                this.buttonList.get(i).setBackgroundColor(Color.parseColor(this.playerColor));
                 this.buttonList.get(i).setOnClickListener(this);
             } else {
                 this.buttonList.get(i).setVisibility(View.VISIBLE);
