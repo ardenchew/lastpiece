@@ -29,4 +29,8 @@ public class BoardState {
 		}
 	}
 
+	public ArrayList<Integer> getList() {
+		return this.boardState;
+	}
+
 }
