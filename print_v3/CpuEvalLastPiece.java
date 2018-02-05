@@ -11,15 +11,16 @@ public class CpuEvalLastPiece extends CpuEval {
 	public Move move;
 
 	public CpuEvalLastPiece(Board b) {
+		this.move = new Move();
 		this.initiateInputArray();
 		this.addBoardState(b);
-		this.sortBoardState();
+		this.input = this.sortBoardState(this.input);
 		this.board = b;
 
 		this.getPossibleMoves();
+		System.out.println(this.options);
 		this.setBestMoves();
 		this.chooseMove();
-		System.out.println("6");
 
 	}
 
@@ -37,17 +38,18 @@ public class CpuEvalLastPiece extends CpuEval {
 		}
 	}
 
-	private void sortBoardState() {
+	private ArrayList<Integer> sortBoardState(ArrayList<Integer> al) {
 		int tmp;
 		for (int i = 1; i < 4; i++) {
 			for (int j = i; j > 0; j--) {
-				if (this.input.get(j) < this.input.get(j-1)) {
-					tmp = this.input.get(j);
-					this.input.set(j, this.input.get(j-1));
-					this.input.set(j-1, tmp);
+				if (al.get(j) < al.get(j-1)) {
+					tmp = al.get(j);
+					al.set(j, al.get(j-1));
+					al.set(j-1, tmp);
 				}
 			}
 		}
+		return al;
 	}
 
 	public void getPossibleMoves() {
@@ -60,6 +62,7 @@ public class CpuEvalLastPiece extends CpuEval {
 					newAl.add(this.input.get(k));
 				}
 				newAl.set(i, (j - 1));
+				newAl = this.sortBoardState(newAl);
 				this.options.add(newAl);
 			}
 		}
@@ -90,7 +93,6 @@ public class CpuEvalLastPiece extends CpuEval {
 			temp = this.options.get(i);
 			for (int j = 0; j < this.bestOptions.size(); j++) {
 				if (temp.equals(this.bestOptions.get(j))) {
-					System.out.println(temp);
 					this.move = this.convertBoardStateMove(temp);
 					return;
 				}
@@ -105,12 +107,12 @@ public class CpuEvalLastPiece extends CpuEval {
 		ArrayList<Integer> tmpBs = new ArrayList<Integer>();
 		ArrayList<Integer> inBs = new ArrayList<Integer>();
 
-		tmpBs = this.input;
-		inBs = this.input;
+		for (int i = 0; i < 4; i++) {
+			tmpBs.add(this.input.get(i));
+			inBs.add(this.input.get(i));
+		}
 		ArrayList<Integer> newBs = bs;
 
-		System.out.println(tmpBs);
-		System.out.println(inBs);
 		System.out.println(newBs);
 		
 		Move m = new Move();
@@ -122,7 +124,9 @@ public class CpuEvalLastPiece extends CpuEval {
 				tmpBs.remove(idxHolder); 
 			}
 		}
-		System.out.println(tmpBs);
+
+		idxHolder = inBs.indexOf(tmpBs.get(0));
+		int numToChange = inBs.get(idxHolder) - newBs.get(idxHolder);
 
 		ArrayList<Column> boardList = this.board.boardList;
 		int cIdx = -1;
@@ -132,10 +136,8 @@ public class CpuEvalLastPiece extends CpuEval {
 			}
 		}
 
-		idxHolder = inBs.indexOf(tmpBs.get(0));
-		int numToChange = inBs.get(idxHolder) - newBs.get(idxHolder);
+		
 		Column c = boardList.get(cIdx);
-
 		for (int i = 0; (i < c.getSize()) && (numToChange > 0); i++) {
 			Packet p = c.get(i);
 			if (p != null) {
@@ -144,6 +146,7 @@ public class CpuEvalLastPiece extends CpuEval {
 			}
 		}
 
+		m.markAsComplete();
 		return m;
 
 	}
