@@ -19,10 +19,18 @@ public abstract class CpuEval {
 		Move m = new Move();
 
 		int idxHolder;
-		for (int i = 0 ; i < tmpBs.size(); i++) {
-			idxHolder = 
+		for (int i = 0 ; i < inBs.size(); i++) {
+			idxHolder = tmpBs.indexOf(curBs.get(i));
+			if (idxHolder != -1) {
+				tmpBs.remove(idxHolder);
+			} else {
+				int cIdx = inBs.indexOf(idxHolder)
+				
+			}
 		}
 	}
+
+	private void convertHelper() {}
 
 
 
