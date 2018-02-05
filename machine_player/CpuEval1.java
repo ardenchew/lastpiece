@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public abstract class CpuEval {
+public abstract class CpuEval1 {
 	
 	public BoardState input;
 	public ArrayList<BoardState> options;
@@ -30,15 +30,11 @@ public abstract class CpuEval {
 		int numToChange = inBs.get(idxHolder) - newBs.get(idxHolder);
 
 		for (int i = 0; i < numToChange; i++) {
-			
+
 		}
 
 
 	}
-
-	private void convertHelper() {}
-
-
 
 
 }

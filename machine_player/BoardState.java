@@ -3,8 +3,10 @@ import java.util.ArrayList;
 public class BoardState {
 	
 	public ArrayList<Integer> boardState;
+	public Board board;
 
 	public BoardState(Board b) {
+		this.board = b;
 		this.boardState = new ArrayList<Integer>();
 		for (int i = 0; i < 4; i++) {
 			this.boardState.add(0);
@@ -14,6 +16,14 @@ public class BoardState {
 			this.boardState.set(i, boardList.get(i).getPacketCount());
 		}
 		this.sort();
+	}
+	
+	public ArrayList<Integer> getList() {
+		return this.boardState;
+	}
+
+	public Board getBoard() {
+		return this.board;
 	}
 
 	public void sort() {
@@ -29,8 +39,5 @@ public class BoardState {
 		}
 	}
 
-	public ArrayList<Integer> getList() {
-		return this.boardState;
-	}
 
 }
