@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 
-public abstract class CpuEval {
-
-	public abstract CpuEval(Board b);
+public abstract class CpuEval { //constructor should take board state
 
 	public abstract void getPossibleMoves();
 

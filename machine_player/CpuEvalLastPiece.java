@@ -1,9 +1,12 @@
 import java.util.ArrayList;
+import static java.util.Arrays.asList;
+import java.util.Random;
 
-public abstract class CpuEvalLastPiece {
+public abstract class CpuEvalLastPiece extends CpuEval {
 	
 	public ArrayList<Integer> input; //constructor defines board input
-	public ArrayList<ArrayList<Integer>> options;
+	public ArrayList<ArrayList<Integer>> options = new ArrayList<ArrayList<Integer>>();
+	public ArrayList<ArrayList<Integer>> bestOptions  = new ArrayList<ArrayList<Integer>>();
 	public Board board;
 	public Move move;
 
@@ -13,7 +16,9 @@ public abstract class CpuEvalLastPiece {
 		this.sortBoardState();
 		this.board = b;
 
-		Move m = this.convertBoadStateMove(this.chooseMove());
+		this.getPossibleMoves();
+		this.setBestMoves();
+		this.chooseMove();
 
 	}
 
@@ -26,7 +31,7 @@ public abstract class CpuEvalLastPiece {
 
 	private void addBoardState(Board b) {
 		ArrayList<Column> boardList = b.boardList;
-		for (int i = 0); i < boardList.size(); i++) {
+		for (int i = 0; i < boardList.size(); i++) {
 			this.input.set(i, boardList.get(i).getPacketCount());
 		}
 	}
@@ -45,17 +50,56 @@ public abstract class CpuEvalLastPiece {
 	}
 
 	public void getPossibleMoves() {
-		return;
+		int jIdx;
+		for (int i = 0; i < 4; i++) {
+			jIdx = this.input.get(i);
+			for (int j = jIdx; j > 0; j--) {
+				ArrayList<Integer> newAl = this.input;
+				newAl.set(i, (jIdx - 1));
+				this.options.add(newAl);
+			}
+		}
+	}
+
+	public void setBestMoves() {
+		this.bestOptions.add(new ArrayList<Integer>(asList(1,0,0,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(1,1,1,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(2,2,0,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(3,2,1,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(5,4,1,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(3,3,0,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(4,4,0,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(5,5,0,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(2,2,1,1)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(3,3,1,1)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(5,5,1,1)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(4,4,1,1)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(6,4,3,1)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(6,5,2,1)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(6,5,3,0)));
+		this.bestOptions.add(new ArrayList<Integer>(asList(6,4,2,0)));
 	}
 
 	public void chooseMove() {
-		return;
+		ArrayList<Integer> temp;
+		for (int i = 0; i < this.options.size(); i++) {
+			temp = this.options.get(i);
+			for (int j = 0; j < this.bestOptions.size(); i++) {
+				if (temp.equals(this.bestOptions.get(j))) {
+					this.move = this.convertBoardStateMove(temp);
+					return;
+				}
+			}
+		}
+		Random rand = new Random();
+		int n = rand.nextInt(this.options.size());
+		this.move = this.convertBoardStateMove(this.options.get(n));
 	}
 
-	public Move convertBoadStateMove(ArrayList<Integer> bs) {
-		ArrayList<Integer> tmpBs = this.input;  {3}
-		ArrayList<Integer> inBs = this.input;  {7, 5, 3, 1}
-		ArrayList<Integer> newBs = bs; {7, 5, 1, 1}
+	public Move convertBoardStateMove(ArrayList<Integer> bs) {
+		ArrayList<Integer> tmpBs = this.input;
+		ArrayList<Integer> inBs = this.input;
+		ArrayList<Integer> newBs = bs;
 		
 		Move m = new Move();
 
@@ -68,7 +112,7 @@ public abstract class CpuEvalLastPiece {
 		}
 
 		ArrayList<Column> boardList = this.board.boardList;
-		int cIdx;
+		int cIdx = -1;
 		for (int i = 0; i < boardList.size(); i++) {
 			if (boardList.get(i).getPacketCount() == tmpBs.get(0)) {
 				cIdx = i;
