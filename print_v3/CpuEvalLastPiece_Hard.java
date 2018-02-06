@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.Random;
 
-public class CpuEvalLastPiece extends CpuEval {
+public class CpuEvalLastPiece_Hard extends CpuEval {
 	
 	public ArrayList<Integer> input; //constructor defines board input
 	public ArrayList<ArrayList<Integer>> options = new ArrayList<ArrayList<Integer>>();
@@ -10,7 +10,7 @@ public class CpuEvalLastPiece extends CpuEval {
 	public Board board;
 	public Move move;
 
-	public CpuEvalLastPiece(Board b) {
+	public CpuEvalLastPiece_Hard(Board b) {
 		this.move = new Move();
 		this.initiateInputArray();
 		this.addBoardState(b);
@@ -80,9 +80,6 @@ public class CpuEvalLastPiece extends CpuEval {
 		this.bestOptions.add(new ArrayList<Integer>(asList(1,1,3,3)));
 		this.bestOptions.add(new ArrayList<Integer>(asList(1,1,5,5)));
 		this.bestOptions.add(new ArrayList<Integer>(asList(1,1,4,4)));
-		this.bestOptions.add(new ArrayList<Integer>(asList(1,3,4,6)));
-		this.bestOptions.add(new ArrayList<Integer>(asList(1,2,5,6)));
-		this.bestOptions.add(new ArrayList<Integer>(asList(0,3,5,6)));
 		this.bestOptions.add(new ArrayList<Integer>(asList(0,2,4,6)));
 	}
 
@@ -103,6 +100,7 @@ public class CpuEvalLastPiece extends CpuEval {
 	public void chooseRandomMove() {
 		Random rand = new Random();
 		int n = rand.nextInt(this.options.size());
+		n = (n / 2) + (n % 2);
 		this.move = this.convertBoardStateMove(this.options.get(n));
 	}
 

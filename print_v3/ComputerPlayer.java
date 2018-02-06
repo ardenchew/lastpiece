@@ -11,7 +11,7 @@ public class ComputerPlayer extends Player {
 	}
 
 	public Input getInput(Board b) {
-		CpuEvalLastPiece celp = new CpuEvalLastPiece(b);
+		CpuEvalLastPiece_Easy celp = new CpuEvalLastPiece_Easy(b);
 		return new Input(Input.INPUTTYPE.CPUINPUT_GAMECOMMAND, celp.getMove()); //TODO
 	}
 

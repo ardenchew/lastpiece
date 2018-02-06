@@ -185,6 +185,7 @@ public class PacketGameMaster {
 
 	public void checkGameOver() {
 		if (this.board.getPacketNum() == 0) {
+			this.winner = this.players.get(isWhosTurn);
 			this.printWinner();
 			this.gameOver();
 		}
