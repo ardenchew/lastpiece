@@ -1,23 +1,25 @@
 package io.github.ardenchew.lastpiece;
 
-public class UserPlayer extends Player {
+/**
+ * Created by arden on 2/5/2018.
+ */
+
+public class ComputerPlayer_Hard extends Player {
 
     public String name;
     public int points;
 
-    public UserPlayer(String n) {
+    public ComputerPlayer_Hard(String n) {
         this.name = n;
-        this.points = 0;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Input getInput(Board b) {
-        return null;
+        CpuEvalLastPiece_Hard celp = new CpuEvalLastPiece_Hard(b);
+        return new Input(Input.INPUTTYPE.CPUINPUT_GAMECOMMAND, celp.getMove()); //TODO
     }
 
     public int getPoints() {

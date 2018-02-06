@@ -35,8 +35,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public String playerColor;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +56,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.hideEndMsg();
 
         this.game = new PacketGameMaster(this.boardSize, this.playerList);
-
         this.updateBoardView();
     }
 
@@ -119,8 +116,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (getIntent().hasExtra("io.github.ardenchew.lastpiece.multi")) {
             Player userPlayer2 = new UserPlayer(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.multi"));
             this.playerList.add(userPlayer2);
-        } else if (getIntent().hasExtra("io.github.ardenchew.lastpiece.single")) {
-            Player computerPlayer1 = new ComputerPlayer(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.single"));
+        } else if (getIntent().hasExtra("io.github.ardenchew.lastpiece.easy")) {
+            Player computerPlayer1 = new ComputerPlayer_Easy(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.easy"));
+            this.playerList.add(computerPlayer1);
+        } else if (getIntent().hasExtra("io.github.ardenchew.lastpiece.medium")) {
+            Player computerPlayer1 = new ComputerPlayer_Medium(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.medium"));
+            this.playerList.add(computerPlayer1);
+        } else if (getIntent().hasExtra("io.github.ardenchew.lastpiece.hard")) {
+            Player computerPlayer1 = new ComputerPlayer_Hard(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.hard"));
+            this.playerList.add(computerPlayer1);
+        } else if (getIntent().hasExtra("io.github.ardenchew.lastpiece.machine")) {
+            Player computerPlayer1 = new ComputerPlayer(getIntent().getExtras().getString("io.github.ardenchew.lastpiece.machine"));
             this.playerList.add(computerPlayer1);
         }
 
@@ -190,6 +196,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 this.game.restart();
                 this.hideEndMsg();
                 this.updateBoardView();
+                if (!(this.game.getCurrentPlayer() instanceof UserPlayer) && !(this.game.isGameOver())) {
+                    in = this.game.getCurrentPlayer().getInput(this.game.getBoard());
+                    this.game.handleInput(in);
+                    this.updateBoardView();
+                }
                 return;
             case R.id.quitButton:
                 this.game.restart();
@@ -203,8 +214,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
         this.game.handleInput(in);
         this.updateBoardView();
-        if (this.game.getCurrentPlayer() instanceof ComputerPlayer) {
-            //TODO create computer player move
+        if (!(this.game.getCurrentPlayer() instanceof UserPlayer) && !(this.game.isGameOver())) {
+            in = this.game.getCurrentPlayer().getInput(this.game.getBoard());
+            this.game.handleInput(in);
+            this.updateBoardView();
         }
         if (this.game.isGameOver()) {
             this.showEndMsg(this.game.winner.getName());

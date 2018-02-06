@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#219be5"
+    tools:context="io.github.ardenchew.lastpiece.CpuPlayActivity">
+
+    <Button
+        android:id="@+id/easyBtn"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:text="Easy"
+        android:textSize="20dp"
+        android:background="#68d258"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.20" />
+
+    <Button
+        android:id="@+id/mediumBtn"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:text="Medium"
+        android:textSize="20dp"
+        android:background="#b2d258"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.40" />
+
+    <Button
+        android:id="@+id/hardBtn"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:text="Hard"
+        android:textSize="20dp"
+        android:background="#d29658"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.60" />
+
+    <Button
+        android:id="@+id/machineBtn"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:text="Beat the machine"
+        android:textSize="20dp"
+        android:background="#d25858"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.80" />
+
+</android.support.constraint.ConstraintLayout>
+

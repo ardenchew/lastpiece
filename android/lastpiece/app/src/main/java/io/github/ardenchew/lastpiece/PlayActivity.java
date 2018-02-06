@@ -27,7 +27,7 @@ public class PlayActivity extends AppCompatActivity {
         singleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startIntent = new Intent(getApplicationContext(), ErrorActivity.class);
+                Intent startIntent = new Intent(getApplicationContext(), CpuPlayActivity.class);
                 //startIntent.putExtra("io.github.ardenchew.lastpiece.single", "Computer");
                 startActivity(startIntent);
 

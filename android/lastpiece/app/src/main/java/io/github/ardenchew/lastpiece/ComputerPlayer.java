@@ -1,5 +1,9 @@
 package io.github.ardenchew.lastpiece;
 
+/**
+ * Created by arden on 2/5/2018.
+ */
+
 public class ComputerPlayer extends Player {
 
     public String name;
@@ -13,7 +17,7 @@ public class ComputerPlayer extends Player {
         return this.name;
     }
 
-    public Input getInput() {
+    public Input getInput(Board b) {
         this.points = 0;
         Move m = new Move();
         return new Input(Input.INPUTTYPE.CPUINPUT_GAMECOMMAND, m); //TODO

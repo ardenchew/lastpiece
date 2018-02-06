@@ -4,7 +4,7 @@ public abstract class Player {
 
     public abstract String getName();
 
-    public abstract Input getInput();
+    public abstract Input getInput(Board b);
 
     public abstract int getPoints();
 
