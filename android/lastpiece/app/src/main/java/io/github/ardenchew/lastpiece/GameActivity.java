@@ -35,6 +35,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public String playerColor;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,8 +1,9 @@
 package io.github.ardenchew.lastpiece;
 
 import java.util.ArrayList;
-import static java.util.Arrays.asList;
 import java.util.Random;
+
+import static java.util.Arrays.asList;
 
 public class CpuEvalLastPiece_Hard extends CpuEval {
 	

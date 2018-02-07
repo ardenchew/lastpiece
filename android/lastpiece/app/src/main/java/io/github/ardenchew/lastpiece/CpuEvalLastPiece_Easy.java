@@ -74,7 +74,6 @@ public class CpuEvalLastPiece_Easy extends CpuEval {
 		this.bestOptions.add(new ArrayList<Integer>(asList(0,0,0,1)));
 		this.bestOptions.add(new ArrayList<Integer>(asList(0,1,1,1)));
 		this.bestOptions.add(new ArrayList<Integer>(asList(0,0,2,2)));
-		this.bestOptions.add(new ArrayList<Integer>(asList(0,1,2,3)));
 	}
 
 	public void chooseMove() {
